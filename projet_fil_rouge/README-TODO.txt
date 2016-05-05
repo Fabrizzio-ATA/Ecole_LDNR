@@ -5,4 +5,5 @@ Premier push de structure.
 
 Difficulté d'import des modeles de Florent, je retente ce soir
 
-Ensuite simplement copier les sources *.java et faire un import depuis eclipse en spécifiant lien virtuel
+Ensuite simplement copier les sources *.java (pour le premier import) et faire un import depuis eclipse en spécifiant lien virtuel dans les propriétés avancées
+
