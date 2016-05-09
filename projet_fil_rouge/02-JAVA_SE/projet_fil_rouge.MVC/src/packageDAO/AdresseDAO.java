@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
 
 import packageJDBC.JDBCConnection;
 
@@ -25,6 +24,9 @@ import packageJDBC.JDBCConnection;
  * @author fabrizzio
  */
 public class AdresseDAO implements InterfaceDb {
+	
+	private static final String table = "Adresse";
+	
 	/**
 	 * Description of the property id.
 	 */
@@ -62,21 +64,18 @@ public class AdresseDAO implements InterfaceDb {
 	 * @param cp
 	 * @param telephone
 	 */
-	public AdresseDAO(Integer id, String voie, String ville, String cp, String telephone) {
-		super();
-		this.id = id;
-		this.voie = voie;
-		this.ville = ville;
-		this.cp = cp;
-		this.telephone = telephone;
+	
+	public AdresseDAO(String voie, String ville, String cp, String telephone) {
+		setVoie(voie);
+		setVille(ville);
+		setCp(cp);
+		setTelephone(telephone);
 	}
-
-	public AdresseDAO() {
-		// Start of user code constructor for AdresseDAO)
-		super();
-		// End of user code
+	
+	private AdresseDAO(Integer id, String voie, String ville, String cp, String telephone) {
+		this(voie, ville, cp, telephone);
+		setId(id);
 	}
-
 
 	/**
 	 * Description of the method dbInsert.
@@ -84,8 +83,39 @@ public class AdresseDAO implements InterfaceDb {
 	 */
 	public boolean dbInsert() {
 		// Start of user code for method dbInsert
-		boolean dbInsert = false;
-		return dbInsert;
+		boolean retBool = false;
+		Connection conn = JDBCConnection.getInstance();
+		
+		String sql = "INSERT INTO "+table+" "
+								+"(voie, cp, ville, telephone) "
+								+"VALUES(?,?,?,?)";
+		ResultSet rs;
+		PreparedStatement pstmt;
+		
+		try {
+			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pstmt.setString(1, this.getVoie());
+			pstmt.setString(2, this.getCp());
+			pstmt.setString(3, this.getVille());
+			pstmt.setString(4, this.getTelephone());
+			
+			pstmt.executeUpdate();
+			rs = pstmt.getGeneratedKeys();
+			
+			if (rs.first()){
+				this.setId(rs.getInt(1)); 
+			}
+			
+			rs.close();
+			pstmt.close();
+			retBool = true;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return retBool;
 		// End of user code
 	}
 
@@ -94,32 +124,34 @@ public class AdresseDAO implements InterfaceDb {
 	 * @param id 
 	 * @return AdresseDAO
 	 */
-	public static AdresseDAO dbSelectFromId(Integer id) {
-		// Start of user code for method dbSelectFromId
+	public static AdresseDAO dbSelectFromId(int id) {
 		AdresseDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
-		String sql = "SELECT * FROM Adresse WHERE id="+id;
+		
+		String sql = "SELECT * FROM "+table+" WHERE id="+id;
+		ResultSet rs = null;
 		Statement stmt = null;
+		
 		try {
-//			stmt = conn.prepareCall(sql);
-			stmt = conn.prepareStatement(sql);
-			// ResultSet est une collection
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next())
-			{
-				AdresseDAO obj = new AdresseDAO (rs.getInt("id"), 
-												rs.getString("voie"), 
-												rs.getString("ville"), 
-												rs.getString("cp"), 
-												rs.getString("telephone"));
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if (rs.first()){
+				retObj = new AdresseDAO(rs.getInt("id"),
+										rs.getString("voie"),
+										rs.getString("cp"),
+										rs.getString("ville"),
+										rs.getString("telephone"));
 			}
 			rs.close();
 			stmt.close();
-		} 
-		catch (SQLException e) {
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return retObj;
+		// Start of user code for method dbSelectFromId
 		// End of user code
 	}
 
@@ -128,48 +160,35 @@ public class AdresseDAO implements InterfaceDb {
 	 * @param id 
 	 * @return 
 	 */
-	public static boolean dbDeleteFromId(Integer id) {
+	public static boolean dbDeleteFromId(Object id) {
 		// Start of user code for method dbDeleteFromId
 		boolean dbDeleteFromId = false;
+		
+		Connection conn = JDBCConnection.getInstance();
+		
+		String sql = "DELETE FROM "+table+" WHERE id="+id;
+		Statement stmt = null;
+		
+		try {
+			stmt = conn.createStatement();
+			dbDeleteFromId =(stmt.executeUpdate(sql) == 1);
+			stmt.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return dbDeleteFromId;
 		// End of user code
 	}
 
 	/**
 	 * Description of the method dbSelectAll.
-	 * @return HashSet <AdresseDAO>
-	 */
-	public static HashSet <AdresseDAO> dbSelectAll() {
-		// Start of user code for method dbSelectAll		
-		HashSet <AdresseDAO> retObj = new HashSet<AdresseDAO>();
-		Connection conn = JDBCConnection.getInstance();
-		String sql = "SELECT * FROM Adresse ORDER BY id ASC";
-		Statement stmt = null;
-		try {
-//			stmt = conn.prepareCall(sql);
-			stmt = conn.prepareStatement(sql);
-
-			// ResultSet est une collection
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next())
-			{
-				AdresseDAO obj = new AdresseDAO  (rs.getInt("id"), 
-						rs.getString("voie"), 
-						rs.getString("ville"), 
-						rs.getString("cp"), 
-						rs.getString("telephone"));
-				retObj.add(obj);
-			}
-			rs.close();
-			stmt.close();
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return retObj;
-		
+	 * @return 
+	
+	public static Object dbSelectAll() {
+		// Start of user code for method dbSelectAll
 		// End of user code
-	}
+	} */
 
 	/**
 	 * Description of the method dbUpdate.
@@ -177,46 +196,34 @@ public class AdresseDAO implements InterfaceDb {
 	 */
 	public boolean dbUpdate() {
 		// Start of user code for method dbUpdate
-		boolean ret = false;
+		int updateRowCount = 0;
 		Connection conn = JDBCConnection.getInstance();
-		String sql = "INSERT INTO maTable "
-				+ "(voie, ville, cp, telephone) VALUES (?,?,?,?)";
-		PreparedStatement pstmt = null;
-		System.out.println(sql);
+		
+		String sql = "UPDATE "+table+"SET voie=? cp=? ville=? telephone=? WHERE id="+this.id;
+		
+		PreparedStatement pstmt;
 		try {
-			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, this.voie);
-			pstmt.setString(1, this.ville);
-			pstmt.setString(1, this.cp);
-			pstmt.setString(1, this.telephone);
-			int nb = pstmt.executeUpdate();
-			ret = true;
-			ResultSet rs = pstmt.getGeneratedKeys();
-			rs.first();
-			this.setId(rs.getInt(1));
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, this.getVoie());
+			pstmt.setString(2, this.getCp());
+			pstmt.setString(3, this.getVille());
+			pstmt.setString(4, this.getTelephone());
+			updateRowCount = pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return ret;
+		return (updateRowCount==1);
 		// End of user code
 	}
 
-	/**
-	 * Description of the method dbExistFromId.
-	 * @param id 
-	 * @return 
-	 */
+
+	@Override
 	public boolean dbExistFromId(Integer id) {
-		// Start of user code for method dbExistFromId
-		boolean dbExistFromId = false;
-		if (null != AdresseDAO.dbSelectFromId(id))
-			dbExistFromId = true;
-		return dbExistFromId;
-		// End of user code
+		// TODO Auto-generated method stub
+		return false;
 	}
-
 	// Start of user code (user defined methods for AdresseDAO)
 
 	// End of user code
@@ -299,5 +306,6 @@ public class AdresseDAO implements InterfaceDb {
 	public void setTelephone(String newTelephone) {
 		this.telephone = newTelephone;
 	}
+
 
 }
