@@ -221,15 +221,6 @@ public class AdresseDAO implements InterfaceDb {
 	}
 
 	/**
-	 * Description of the method dbSelectAll.
-	 * @return 
-	
-	public static Object dbSelectAll() {
-		// Start of user code for method dbSelectAll
-		// End of user code
-	} */
-
-	/**
 	 * Description of the method dbUpdate.
 	 * @return 
 	 */
@@ -263,6 +254,15 @@ public class AdresseDAO implements InterfaceDb {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public boolean hasSameContent(AdresseDAO obj){
+		return(this.voie.equals(obj.getVoie()) &&
+				this.cp.equals(obj.getCp()) &&
+				this.ville.equals(obj.getVille()) &&
+				this.telephone.equals(obj.getTelephone())
+				);
+	}
+	
 	// Start of user code (user defined methods for AdresseDAO)
 
 	// End of user code
