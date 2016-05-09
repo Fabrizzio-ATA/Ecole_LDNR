@@ -140,8 +140,8 @@ public class AdresseDAO implements InterfaceDb {
 			if (rs.first()){
 				retObj = new AdresseDAO(rs.getInt("id"),
 										rs.getString("voie"),
-										rs.getString("cp"),
 										rs.getString("ville"),
+										rs.getString("cp"),
 										rs.getString("telephone"));
 			}
 			rs.close();
@@ -176,8 +176,8 @@ public class AdresseDAO implements InterfaceDb {
 				while(rs.next()){
 					retObj = new AdresseDAO(rs.getInt("id"),
 											rs.getString("voie"),
-											rs.getString("cp"),
 											rs.getString("ville"),
+											rs.getString("cp"),
 											rs.getString("telephone"));
 					tabAdresse.add(retObj);
 				}
@@ -256,11 +256,10 @@ public class AdresseDAO implements InterfaceDb {
 	}
 	
 	public boolean hasSameContent(AdresseDAO obj){
-		return(this.voie.equals(obj.getVoie()) &&
-				this.cp.equals(obj.getCp()) &&
-				this.ville.equals(obj.getVille()) &&
-				this.telephone.equals(obj.getTelephone())
-				);
+		return(this.ville.equals(obj.getVille())
+				&& this.cp.equals(obj.getCp())
+				&& this.voie.equals(obj.getVoie())
+				&& this.telephone.equals(obj.getTelephone()));
 	}
 	
 	// Start of user code (user defined methods for AdresseDAO)

@@ -65,7 +65,6 @@ public class TestAdresseDAO {
 		AdresseDAO obj2 = AdresseDAO.dbSelectFromId(obj.getId());
 		
 		System.out.println("id "+obj.getId()+" : à été creer lors du test DbSelectFromId");
-		
 		//Vérification de la création d'objet
 		assertNotNull("test si le select n'est pas null", obj2);
 		
