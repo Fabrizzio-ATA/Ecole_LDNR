@@ -72,6 +72,34 @@ public class TestAdresseDAO {
 		assertTrue("test du select par id", obj.hasSameContent(obj2));
 	}
 	
+	@Test
+	public void testDbExistFromId() {
+		//id inexistant doit renvoyer false
+		assertFalse("id inexistant doit renvoyer false", AdresseDAO.dbExistFromId(-1));
+		
+		//id existant doit renvoyer true
+		AdresseDAO obj = dbInsertNewValidObj();
+		assertTrue("id existant doit renvoyer true", AdresseDAO.dbExistFromId(obj.getId()));
+	}
+	
+	@Test
+	public void testDbUpdate() {
+		AdresseDAO obj = newValidObj();
+		//Test d'update sur un enregistrement inexistant
+		//Doit renvoyé false
+		assertFalse("Test d'update sur un enregistrement inexistant", obj.dbUpdate());
+		
+		AdresseDAO obj2 = dbInsertNewValidObj();
+		obj2.setCp("31000");
+		//Test d'update sur un enregistrement inexistant
+		//Doit renvoyé true
+		assertTrue("Test d'update sur un enregistrement existant", obj2.dbUpdate());
+		
+		//Test si les valeurs en base de donnée correspondent bien à l'update effectué
+		AdresseDAO obj3 = AdresseDAO.dbSelectFromId(obj2.getId());
+		assertTrue("test que les valeurs en base de donnée correspondent bien à l'update effectué", obj2.hasSameContent(obj3));
+	}
+	
 	@AfterClass
 	public static void oneTimeTearDown(){
 		for (Integer i : tabIdToDelete){

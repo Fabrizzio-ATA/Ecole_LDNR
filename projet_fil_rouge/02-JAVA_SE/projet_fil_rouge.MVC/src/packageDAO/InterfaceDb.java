@@ -63,7 +63,11 @@ public interface InterfaceDb {
 	 * @param id 
 	 * @return 
 	 */
-	public abstract boolean dbExistFromId(Integer id);
+	public static boolean dbExistFromId(Integer id) {
+		boolean retBool = false; 
+		
+		return retBool;
+	}
 
 	// Start of user code (user defined methods for InterfaceDb)
 

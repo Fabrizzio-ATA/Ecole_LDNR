@@ -229,7 +229,7 @@ public class AdresseDAO implements InterfaceDb {
 		int updateRowCount = 0;
 		Connection conn = JDBCConnection.getInstance();
 		
-		String sql = "UPDATE "+table+"SET voie=? cp=? ville=? telephone=? WHERE id="+this.id;
+		String sql = "UPDATE "+table+" SET voie=?, cp=?, ville=?, telephone=? WHERE id="+getId();
 		
 		PreparedStatement pstmt;
 		try {
@@ -249,10 +249,29 @@ public class AdresseDAO implements InterfaceDb {
 	}
 
 
-	@Override
-	public boolean dbExistFromId(Integer id) {
-		// TODO Auto-generated method stub
-		return false;
+	public static boolean dbExistFromId(Integer id) {
+		boolean retBool = false; 
+		Connection conn = JDBCConnection.getInstance();
+		
+		String sql = "SELECT * FROM "+table+" WHERE id="+id;
+		ResultSet rs = null;
+		Statement stmt = null;
+		
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			if (rs.first()){
+				retBool = true;
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return retBool;
 	}
 	
 	public boolean hasSameContent(AdresseDAO obj){
