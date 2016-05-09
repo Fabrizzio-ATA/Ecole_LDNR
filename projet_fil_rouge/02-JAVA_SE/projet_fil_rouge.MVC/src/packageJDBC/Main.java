@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
+
+import packageDAO.AdresseDAO;
 
 public class Main {
 
@@ -45,5 +48,17 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
+		
+		HashSet <AdresseDAO> tabAdresse = AdresseDAO.dbSelectAll();
+		
+		for (AdresseDAO index : tabAdresse)
+		{
+			System.out.println("Adresse " + index.getId() + "=" 
+										+ index.getVoie() + ";"
+										+ index.getCp() + ";"
+										+ index.getVille() + ";"
+					);
+		}
+		
 	}
 }
