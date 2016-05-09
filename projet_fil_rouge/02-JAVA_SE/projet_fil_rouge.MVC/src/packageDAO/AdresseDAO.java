@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 
 import packageJDBC.JDBCConnection;
 
@@ -154,13 +155,51 @@ public class AdresseDAO implements InterfaceDb {
 		// Start of user code for method dbSelectFromId
 		// End of user code
 	}
+	
+	/**
+	 * Description of the method dbSelectAll.
+	 * @return HashSet <AdresseDAO>
+	 */
+	public static HashSet <AdresseDAO> dbSelectAll() {
+		HashSet<AdresseDAO> tabAdresse = new HashSet<AdresseDAO>();
+		AdresseDAO retObj = null;
+		Connection conn = JDBCConnection.getInstance();
+		
+		String sql = "SELECT * FROM "+table;
+		ResultSet rs = null;
+		Statement stmt = null;
+		
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if(rs.first()){
+				while(rs.next()){
+					retObj = new AdresseDAO(rs.getInt("id"),
+											rs.getString("voie"),
+											rs.getString("cp"),
+											rs.getString("ville"),
+											rs.getString("telephone"));
+					tabAdresse.add(retObj);
+				}
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return tabAdresse;
+		// Start of user code for method dbSelectFromId
+		// End of user code
+	}
 
 	/**
 	 * Description of the method dbDeleteFromId.
 	 * @param id 
 	 * @return 
 	 */
-	public static boolean dbDeleteFromId(Object id) {
+	public static boolean dbDeleteFromId(int id) {
 		// Start of user code for method dbDeleteFromId
 		boolean dbDeleteFromId = false;
 		

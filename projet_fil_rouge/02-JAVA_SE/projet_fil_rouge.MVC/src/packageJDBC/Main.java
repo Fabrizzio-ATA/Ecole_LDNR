@@ -53,10 +53,10 @@ public class Main {
 		
 		for (AdresseDAO index : tabAdresse)
 		{
-			System.out.println("Adresse " + index.getId() + "=" 
-										+ index.getVoie() + ";"
-										+ index.getCp() + ";"
-										+ index.getVille() + ";"
+			System.out.println("Adresse " + index.getId() + " = " 
+										+ index.getVoie() + " ; "
+										+ index.getCp() + " ; "
+										+ index.getVille() + " ;"
 					);
 		}
 		
