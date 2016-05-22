@@ -1,13 +1,8 @@
 package packageJDBC;
 
-import java.util.HashSet;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
 
 
 /**
@@ -25,9 +20,7 @@ public class JDBCConnection {
 	
 	// L'URL de ma DB à contacter
 	//		static final String DB_URL = "jdbc:mysql://localhost:3306/stag";
-	static final String DB_URL = "jdbc:mysql://82.229.232.36:3306/db_ecole_v6";
-//	static final String DB_URL = "jdbc:mysql://192.168.0.51:3306/db_ecole_v6";
-	
+	static final String DB_URL = "jdbc:mysql://82.229.232.36:3306/db_ecole_test";	
 	
 	// Mes paramètres de connexion
 	// Il faut passer par des propriétés
@@ -68,6 +61,8 @@ public class JDBCConnection {
 	/**
 	 * Methode d'accès à une connection avec définition du user et password
 	 * @return connection
+	 * 
+	 * Attention à l'utilisation du synchronize qui peut alourdir l'exécution. Idéalement, ne synchroniser que l'appel au constructeur.
 	 */
 	public static synchronized Connection getInstance(String user, String pass)
 	{
@@ -86,7 +81,6 @@ public class JDBCConnection {
 		}
 		return connection;
 	}
-	
 	
 	public static synchronized void shutDownConnection()
 	{

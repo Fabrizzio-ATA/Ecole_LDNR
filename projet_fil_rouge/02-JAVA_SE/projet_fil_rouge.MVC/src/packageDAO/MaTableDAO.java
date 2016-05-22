@@ -6,58 +6,43 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.Vector;
 
+import packageAppli.MaTable;
 import packageJDBC.JDBCConnection;
 
-public class MaTableDAO 
+/**
+ * 
+ * @author fabrizzio
+ *	2016-05-16
+ *	added Table classe to show the difference between DAO layer and application layer
+ *	removed conection which is done through the constructor of the DAO class
+ */
+public class MaTableDAO extends DAO<MaTable>
 {
-	private Integer id;
-	private String nom = "nom_test";
-	private LocalDate date;
-	private static final String table = "Adresse";
+	private final String table = "TestTable";
 
 	//************************************************************************
 	//** CONSTRUCTORS
 	//************************************************************************
 
-	public MaTableDAO(String nom, LocalDate date) {
-		this.setNom(nom);
-		this.setDate(date);
+	public MaTableDAO(Connection conn)
+	{
+		super(conn);
 	}
 	
-	public MaTableDAO(Integer id, String nom, LocalDate date) {
-		this(nom,date);
-		this.setId(id);
+	public MaTableDAO()
+	{
+		super();
 	}
 	
 	//************************************************************************
 	//** GETTERS SETTERS
 	//************************************************************************
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getNom() {
-		return nom;
-	}
-
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public String getTable()
+	{
+		return table;
 	}
 	
 	//************************************************************************
@@ -67,14 +52,14 @@ public class MaTableDAO
 	/**
 	 * Description of the method dbSelectById
 	 * @param id
-	 * @return MaTableDAO
+	 * @return MaTable
 	 */
 
-	public MaTableDAO dbSelectById(int id){
+	public MaTable dbSelectFromId(Integer id){
 
-		MaTableDAO retObj = null;
-		Connection conn = JDBCConnection.getInstance("","");
-		String sql = "SELECT * FROM "+ table + "WHERE id="+id;
+		MaTable retObj = null;
+
+		String sql = "SELECT * FROM "+ table + " WHERE id="+id;
 		Statement stmt = null;
 		ResultSet rs = null;
 		
@@ -84,8 +69,8 @@ public class MaTableDAO
 			rs = stmt.executeQuery(sql);
 			while(rs.next())
 			{
-				MaTableDAO obj = new MaTableDAO (rs.getInt("id"), 
-												rs.getString("nom"),
+				retObj = new MaTable (rs.getInt("id"), 
+												rs.getString("name"),
 												rs.getDate("date").toLocalDate());
 			}
 			rs.close();
@@ -100,12 +85,12 @@ public class MaTableDAO
 	
 	/**
 	 * Description of the method dbSelectAll
-	 * @return HashSet <MaTableDAO> 
+	 * @return Vector <MaTableDAO> 
 	 */
-	public HashSet <MaTableDAO> dbSelectAll()
+	public Vector <MaTable> dbSelectAll()
 	{
-		HashSet <MaTableDAO> retObj = new HashSet<MaTableDAO>();
-		Connection conn = JDBCConnection.getInstance();
+		Vector <MaTable> retObj = new Vector<MaTable>();
+
 		String sql = "SELECT * FROM "+ table + " ORDER BY id ASC";
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -115,7 +100,7 @@ public class MaTableDAO
 			rs = stmt.executeQuery(sql);
 			while(rs.next())
 			{
-				MaTableDAO obj = new MaTableDAO (rs.getInt("id"), 
+				MaTable obj = new MaTable	(rs.getInt("id"), 
 												rs.getString("nom"),
 												rs.getDate("date").toLocalDate());
 				retObj.add(obj);
@@ -136,41 +121,26 @@ public class MaTableDAO
 	 * - pour éviter des injections dans les requêtes, on spécifie le retour attendu dans ?
 	 * 
 	 */
-	public boolean dbInsert(){
+	public boolean dbInsert(MaTable obj){
 
 		boolean ret = false;
-//		Connection conn = JDBCConnection.getInstance();
-//		String sql = "INSERT INTO maTable"
-//					+ "(nom, date) VALUES ("
-//				+ this.nom + "," + this.date + ")";
-//		Statement stmt = null;
-//		try {
-//			stmt = conn.prepareStatement(sql);
-//			int nb = stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-//			ret = true;
-//			ResultSet rs = stmt.getGeneratedKeys();
-//			rs.first();
-//			this.dbSelectById(rs.getId(1));
-//			stmt.close();
-//		} 
-		Connection conn = JDBCConnection.getInstance();
-		String sql = "INSERT INTO maTable"
-					+ "(nom, date) VALUES (?,?)";
+
+		String sql = "INSERT INTO "+ table + " (name, date) VALUES (?,?)";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(0, this.getNom());
-			pstmt.setDate(1, Date.valueOf(this.getDate()));
+			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pstmt.setString(1, obj.getName());
+			pstmt.setDate(2, Date.valueOf(obj.getDate()));
 			
-			int nb = pstmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+			int nb = pstmt.executeUpdate();
 			if (1 == nb)
 			{
 				ret = true;
 				rs = pstmt.getGeneratedKeys();
 				if (rs.first())
 				{
-					this.setId(rs.getInt(1));
+					obj.setId(rs.getInt(1));
 				}
 			}
 			pstmt.close();
@@ -185,22 +155,23 @@ public class MaTableDAO
 	
 	/**
 	 * Description of the method dbUpdateFromId.
-	 * @param id 
+	 * @param new_id 
 	 * @return boolean
 	 */
-	public boolean dbUpdate() {
+	public boolean dbUpdate(MaTable obj) {
 		// FIXME Why rowcount if it just 1 ?
 		int updateRowCount = 0;
 
-		Connection conn = JDBCConnection.getInstance();
-		String sql = "UPDATE "+table+" SET nom=?, date=? WHERE id="+getId();
+		String sql = "UPDATE "+table+" SET name=?, date=? WHERE id="+obj.getId();
 
-		PreparedStatement stmt = null;
+		PreparedStatement pstmt = null;
 		
 		try {
-			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, this.getNom());
-			stmt.setDate(2, Date.valueOf(this.getDate()));
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, obj.getName());
+			pstmt.setDate(2, Date.valueOf(obj.getDate()));
+			updateRowCount = pstmt.executeUpdate();
+			pstmt.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -208,15 +179,6 @@ public class MaTableDAO
 		}
 		
 		return (1 == updateRowCount);
-	}
-	/**
-	 * Description of the method hasSameContent
-	 * @param obj
-	 * @return boolean
-	 */
-	public boolean hasSameContent(MaTableDAO obj){
-		return(this.nom.equals(obj.getNom())
-				&& this.date.equals(obj.getDate()));
 	}
 
 	/**
@@ -226,9 +188,8 @@ public class MaTableDAO
 	 * 
 	 * @NOTE - Identical method for all classes !
 	 */
-	public static boolean dbExistFromId(Integer id) {
+	public boolean dbExistFromId(Integer id) {
 		boolean retBool = false; 
-		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "SELECT * FROM "+table+" WHERE id="+id;
 		ResultSet rs = null;
@@ -258,11 +219,9 @@ public class MaTableDAO
 	 * 
 	 * @NOTE - Identical method for all classes !
 	 */
-	public static boolean dbDeleteFromId(int id) {
+	public boolean dbDeleteFromId(int id) {
 		boolean dbDeleteFromId = false;
-		
-		Connection conn = JDBCConnection.getInstance();
-		
+				
 		String sql = "DELETE FROM "+table+" WHERE id="+id;
 		Statement stmt = null;
 		
@@ -275,7 +234,5 @@ public class MaTableDAO
 			e.printStackTrace();
 		}
 		return dbDeleteFromId;
-	}
-	
-	
+	}	
 }
