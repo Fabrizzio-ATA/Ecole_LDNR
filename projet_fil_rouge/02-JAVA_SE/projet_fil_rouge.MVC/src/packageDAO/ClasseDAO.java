@@ -1,83 +1,45 @@
 package packageDAO;
 
-
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashSet;
 
+import packageException.InputValueInvalidException;
+import packageException.InputValueTooLongException;
 import packageJDBC.JDBCConnection;
 
-/*******************************************************************************
-
- * 2016, All rights reserved.
- *******************************************************************************/
-
-// Start of user code (user defined imports)
-
-// End of user code
-
-/**
- * Description of AdresseDAO.
- * 
- * @author fabrizzio
- */
-public class AdresseDAO implements InterfaceDb {
-	
-	private static String table = "Adresse";
+public class ClasseDAO implements InterfaceDb {
+	private static String table = "Classe";
+	private static final int MAX_LENGTH_NOM = 5;
+	private static final int MAX_LENGTH_PERIODE = 4;
 	
 	/**
 	 * Description of the property id.
 	 */
 	private Integer id = Integer.valueOf(0);
-
-	/**
-	 * Description of the property voie.
-	 */
-	private String voie = "";
-
-	/**
-	 * Description of the property ville.
-	 */
-	private String ville = "";
-
-	/**
-	 * Description of the property cp.
-	 */
-	private String cp = "";
-
-	/**
-	 * Description of the property telephone.
-	 */
-	private String telephone = "";
-
-	// Start of user code (user defined attributes for AdresseDAO)
-
-	// End of user code
-
-	/**
-	 * 
-	 * @param id
-	 * @param voie
-	 * @param ville
-	 * @param cp
-	 * @param telephone
-	 */
 	
-	public AdresseDAO(String voie, String ville, String cp, String telephone) {
-		setVoie(voie);
-		setVille(ville);
-		setCp(cp);
-		setTelephone(telephone);
+	private Integer Enseignant_id;
+	
+	private String nom, periode;
+	
+	private Niveau niveau;
+	
+	public ClasseDAO(String nom, String niveau, String periode, Integer enseignant_id) throws InputValueTooLongException{
+		setNiveau(niveau);
+		setNom(nom);
+		setPeriode(periode);
+		setEnseignant_id(enseignant_id);
 	}
 	
-	private AdresseDAO(Integer id, String voie, String ville, String cp, String telephone) {
-		this(voie, ville, cp, telephone);
+	private ClasseDAO(Integer id, String nom, String niveau, String periode, Integer Enseignant_id) throws InputValueTooLongException{
+		this(nom, niveau, periode, Enseignant_id);
 		setId(id);
 	}
-
 	/**
 	 * Description of the method dbInsert.
 	 * @return 
@@ -88,17 +50,17 @@ public class AdresseDAO implements InterfaceDb {
 		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "INSERT INTO "+table+" "
-								+"(voie, cp, ville, telephone) "
+								+"(nom, niveau, periode, Enseignant_id) "
 								+"VALUES(?,?,?,?)";
 		ResultSet rs;
 		PreparedStatement pstmt;
 		
 		try {
 			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, this.getVoie());
-			pstmt.setString(2, this.getCp());
-			pstmt.setString(3, this.getVille());
-			pstmt.setString(4, this.getTelephone());
+			pstmt.setString(1, this.getNom());
+			pstmt.setString(2, this.getNiveau().getLabelCourt());
+			pstmt.setString(3, this.getPeriode());
+			pstmt.setInt(4, this.getEnseignant_id());
 			
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
@@ -123,10 +85,10 @@ public class AdresseDAO implements InterfaceDb {
 	/**
 	 * Description of the method dbSelectFromId.
 	 * @param id 
-	 * @return AdresseDAO
+	 * @return EleveDAO
 	 */
-	public static AdresseDAO dbSelectFromId(int id) {
-		AdresseDAO retObj = null;
+	public static ClasseDAO dbSelectFromId(int id) {
+		ClasseDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "SELECT * FROM "+table+" WHERE id="+id;
@@ -138,11 +100,11 @@ public class AdresseDAO implements InterfaceDb {
 			rs = stmt.executeQuery(sql);
 			
 			if (rs.first()){
-				retObj = new AdresseDAO(rs.getInt("id"),
-										rs.getString("voie"),
-										rs.getString("ville"),
-										rs.getString("cp"),
-										rs.getString("telephone"));
+				retObj = new ClasseDAO(rs.getInt("id"),
+										rs.getString("nom"),
+										rs.getString("niveau"),
+										rs.getString("periode"),
+										rs.getInt("Enseignant_id"));
 			}
 			rs.close();
 			stmt.close();
@@ -158,11 +120,11 @@ public class AdresseDAO implements InterfaceDb {
 	
 	/**
 	 * Description of the method dbSelectAll.
-	 * @return HashSet <AdresseDAO>
+	 * @return HashSet <EnseignantDAO>
 	 */
-	public static HashSet <AdresseDAO> dbSelectAll() {
-		HashSet<AdresseDAO> tabAdresse = new HashSet<AdresseDAO>();
-		AdresseDAO retObj = null;
+	public static HashSet <ClasseDAO> dbSelectAll() {
+		HashSet<ClasseDAO> tabCivilite = new HashSet<ClasseDAO>();
+		ClasseDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "SELECT * FROM "+table;
@@ -174,12 +136,11 @@ public class AdresseDAO implements InterfaceDb {
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
 				while(rs.next()){
-					retObj = new AdresseDAO(rs.getInt("id"),
-											rs.getString("voie"),
-											rs.getString("ville"),
-											rs.getString("cp"),
-											rs.getString("telephone"));
-					tabAdresse.add(retObj);
+					retObj = new ClasseDAO(rs.getInt("id"),
+											rs.getString("nom"),
+											rs.getString("niveau"),
+											rs.getString("periode"),
+											rs.getInt("Enseignant_id"));
 				}
 			}
 			rs.close();
@@ -189,7 +150,7 @@ public class AdresseDAO implements InterfaceDb {
 			e.printStackTrace();
 		}
 		
-		return tabAdresse;
+		return tabCivilite;
 		// Start of user code for method dbSelectFromId
 		// End of user code
 	}
@@ -229,15 +190,16 @@ public class AdresseDAO implements InterfaceDb {
 		int updateRowCount = 0;
 		Connection conn = JDBCConnection.getInstance();
 		
-		String sql = "UPDATE "+table+" SET voie=?, cp=?, ville=?, telephone=? WHERE id="+getId();
+		String sql = "UPDATE "+table+" SET nom=?, niveau=?, periode=?, Enseignant_id=? WHERE id="+getId();
 		
 		PreparedStatement pstmt;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, this.getVoie());
-			pstmt.setString(2, this.getCp());
-			pstmt.setString(3, this.getVille());
-			pstmt.setString(4, this.getTelephone());
+			pstmt.setString(1, this.getNom());
+			pstmt.setString(2, this.getNiveau().getLabelCourt());
+			pstmt.setString(3, this.getPeriode());
+			pstmt.setInt(4, this.getEnseignant_id());
+			
 			updateRowCount = pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -274,95 +236,65 @@ public class AdresseDAO implements InterfaceDb {
 		return retBool;
 	}
 	
-	public boolean hasSameContent(AdresseDAO obj){
-		return(this.ville.equals(obj.getVille())
-				&& this.cp.equals(obj.getCp())
-				&& this.voie.equals(obj.getVoie())
-				&& this.telephone.equals(obj.getTelephone()));
+	public boolean hasSameContent(ClasseDAO obj){
+		return(this.nom.equals(obj.getNom())
+				&& this.periode.equals(obj.getPeriode())
+				&& this.niveau.equals(obj.getNiveau())
+				&& this.Enseignant_id.equals(obj.getEnseignant_id()));
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
-	// Start of user code (user defined methods for AdresseDAO)
-
-	// End of user code
-	/**
-	 * Returns id.
-	 * @return id 
-	 */
-	public Integer getId() {
-		return this.id;
+	public Niveau getNiveau() {
+		return this.niveau;
 	}
 
-	/**
-	 * Sets a value to attribute id. 
-	 * @param newId 
-	 */
-	public void setId(Integer newId) {
-		this.id = newId;
+	public void setNiveau(String niveau) {
+		try {
+			this.niveau = Niveau.fromString(niveau);
+		} catch (InputValueInvalidException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}
 	}
 
-	/**
-	 * Returns voie.
-	 * @return voie 
-	 */
-	public String getVoie() {
-		return this.voie;
+	public Integer getEnseignant_id() {
+		return Enseignant_id;
 	}
 
-	/**
-	 * Sets a value to attribute voie. 
-	 * @param newVoie 
-	 */
-	public void setVoie(String newVoie) {
-		this.voie = newVoie;
+	public void setEnseignant_id(Integer enseignant_id) {
+		Enseignant_id = enseignant_id;
 	}
 
-	/**
-	 * Returns ville.
-	 * @return ville 
-	 */
-	public String getVille() {
-		return this.ville;
+	public String getNom() {
+		return nom;
 	}
 
-	/**
-	 * Sets a value to attribute ville. 
-	 * @param newVille 
-	 */
-	public void setVille(String newVille) {
-		this.ville = newVille;
+	public void setNom(String nom) throws InputValueTooLongException{
+		if(nom.length()>ClasseDAO.MAX_LENGTH_NOM){
+			this.nom = nom.substring(0,ClasseDAO.MAX_LENGTH_NOM);
+			throw new InputValueTooLongException("nom de la Classe", ClasseDAO.MAX_LENGTH_NOM, nom.length());
+		}
+		else this.nom = nom;
 	}
 
-	/**
-	 * Returns cp.
-	 * @return cp 
-	 */
-	public String getCp() {
-		return this.cp;
+	public String getPeriode() {
+		return periode;
 	}
 
-	/**
-	 * Sets a value to attribute cp. 
-	 * @param newCp 
-	 */
-	public void setCp(String newCp) {
-		this.cp = newCp;
+	public void setPeriode(String periode) throws InputValueTooLongException {
+		if(periode.length()>ClasseDAO.MAX_LENGTH_PERIODE){
+			throw new InputValueTooLongException("La periode contient trop de caractere", ClasseDAO.MAX_LENGTH_PERIODE, periode.length());
+		}
+		else this.periode = periode;
+		
 	}
-
-	/**
-	 * Returns telephone.
-	 * @return telephone 
-	 */
-	public String getTelephone() {
-		return this.telephone;
-	}
-
-	/**
-	 * Sets a value to attribute telephone. 
-	 * @param newTelephone 
-	 */
-	public void setTelephone(String newTelephone) {
-		this.telephone = newTelephone;
-	}
-
+	
 
 }

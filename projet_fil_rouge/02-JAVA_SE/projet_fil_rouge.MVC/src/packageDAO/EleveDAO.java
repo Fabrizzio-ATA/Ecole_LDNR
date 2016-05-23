@@ -1,6 +1,5 @@
 package packageDAO;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,73 +7,29 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 
+import packageException.InputValueInvalidException;
 import packageJDBC.JDBCConnection;
 
-/*******************************************************************************
-
- * 2016, All rights reserved.
- *******************************************************************************/
-
-// Start of user code (user defined imports)
-
-// End of user code
-
-/**
- * Description of AdresseDAO.
- * 
- * @author fabrizzio
- */
-public class AdresseDAO implements InterfaceDb {
+public class EleveDAO implements InterfaceDb {
 	
-	private static String table = "Adresse";
+	private static String table = "Eleve";
 	
 	/**
 	 * Description of the property id.
 	 */
 	private Integer id = Integer.valueOf(0);
-
-	/**
-	 * Description of the property voie.
-	 */
-	private String voie = "";
-
-	/**
-	 * Description of the property ville.
-	 */
-	private String ville = "";
-
-	/**
-	 * Description of the property cp.
-	 */
-	private String cp = "";
-
-	/**
-	 * Description of the property telephone.
-	 */
-	private String telephone = "";
-
-	// Start of user code (user defined attributes for AdresseDAO)
-
-	// End of user code
-
-	/**
-	 * 
-	 * @param id
-	 * @param voie
-	 * @param ville
-	 * @param cp
-	 * @param telephone
-	 */
 	
-	public AdresseDAO(String voie, String ville, String cp, String telephone) {
-		setVoie(voie);
-		setVille(ville);
-		setCp(cp);
-		setTelephone(telephone);
+	private int Civilite_id;
+	
+	private StatutEleve statutEleve;
+
+	public EleveDAO(int Civilite_id, String statutEleve) {
+		setCivilite_id(Civilite_id);
+		setStatutEleve(statutEleve);
 	}
 	
-	private AdresseDAO(Integer id, String voie, String ville, String cp, String telephone) {
-		this(voie, ville, cp, telephone);
+	private EleveDAO(Integer id, int Civilite_id, String statutEleve){
+		this(Civilite_id, statutEleve);
 		setId(id);
 	}
 
@@ -88,17 +43,15 @@ public class AdresseDAO implements InterfaceDb {
 		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "INSERT INTO "+table+" "
-								+"(voie, cp, ville, telephone) "
-								+"VALUES(?,?,?,?)";
+								+"(Civilite_id, StatutEleve) "
+								+"VALUES(?,?)";
 		ResultSet rs;
 		PreparedStatement pstmt;
 		
 		try {
 			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, this.getVoie());
-			pstmt.setString(2, this.getCp());
-			pstmt.setString(3, this.getVille());
-			pstmt.setString(4, this.getTelephone());
+			pstmt.setInt(1, this.getCivilite_id());
+			pstmt.setString(2, this.getStatutEleve().getStatut());
 			
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
@@ -123,10 +76,10 @@ public class AdresseDAO implements InterfaceDb {
 	/**
 	 * Description of the method dbSelectFromId.
 	 * @param id 
-	 * @return AdresseDAO
+	 * @return EleveDAO
 	 */
-	public static AdresseDAO dbSelectFromId(int id) {
-		AdresseDAO retObj = null;
+	public static EleveDAO dbSelectFromId(int id) {
+		EleveDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "SELECT * FROM "+table+" WHERE id="+id;
@@ -138,11 +91,9 @@ public class AdresseDAO implements InterfaceDb {
 			rs = stmt.executeQuery(sql);
 			
 			if (rs.first()){
-				retObj = new AdresseDAO(rs.getInt("id"),
-										rs.getString("voie"),
-										rs.getString("ville"),
-										rs.getString("cp"),
-										rs.getString("telephone"));
+				retObj = new EleveDAO(rs.getInt("id"),
+										rs.getInt("Civilite_id"),
+										rs.getString("StatutEleve"));
 			}
 			rs.close();
 			stmt.close();
@@ -158,11 +109,11 @@ public class AdresseDAO implements InterfaceDb {
 	
 	/**
 	 * Description of the method dbSelectAll.
-	 * @return HashSet <AdresseDAO>
+	 * @return HashSet <EleveDAO>
 	 */
-	public static HashSet <AdresseDAO> dbSelectAll() {
-		HashSet<AdresseDAO> tabAdresse = new HashSet<AdresseDAO>();
-		AdresseDAO retObj = null;
+	public static HashSet <EleveDAO> dbSelectAll() {
+		HashSet<EleveDAO> tabEleve = new HashSet<EleveDAO>();
+		EleveDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "SELECT * FROM "+table;
@@ -174,12 +125,10 @@ public class AdresseDAO implements InterfaceDb {
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
 				while(rs.next()){
-					retObj = new AdresseDAO(rs.getInt("id"),
-											rs.getString("voie"),
-											rs.getString("ville"),
-											rs.getString("cp"),
-											rs.getString("telephone"));
-					tabAdresse.add(retObj);
+					retObj = new EleveDAO(rs.getInt("id"),
+											rs.getInt("Civilite_id"),
+											rs.getString("StatutEleve"));
+					tabEleve.add(retObj);
 				}
 			}
 			rs.close();
@@ -189,7 +138,7 @@ public class AdresseDAO implements InterfaceDb {
 			e.printStackTrace();
 		}
 		
-		return tabAdresse;
+		return tabEleve;
 		// Start of user code for method dbSelectFromId
 		// End of user code
 	}
@@ -229,15 +178,13 @@ public class AdresseDAO implements InterfaceDb {
 		int updateRowCount = 0;
 		Connection conn = JDBCConnection.getInstance();
 		
-		String sql = "UPDATE "+table+" SET voie=?, cp=?, ville=?, telephone=? WHERE id="+getId();
+		String sql = "UPDATE "+table+" SET Civilite_id=?, StatutEleve=? WHERE id="+getId();
 		
 		PreparedStatement pstmt;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, this.getVoie());
-			pstmt.setString(2, this.getCp());
-			pstmt.setString(3, this.getVille());
-			pstmt.setString(4, this.getTelephone());
+			pstmt.setInt(1, this.getCivilite_id());
+			pstmt.setString(2, this.getStatutEleve().getStatut());
 			updateRowCount = pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -274,11 +221,9 @@ public class AdresseDAO implements InterfaceDb {
 		return retBool;
 	}
 	
-	public boolean hasSameContent(AdresseDAO obj){
-		return(this.ville.equals(obj.getVille())
-				&& this.cp.equals(obj.getCp())
-				&& this.voie.equals(obj.getVoie())
-				&& this.telephone.equals(obj.getTelephone()));
+	public boolean hasSameContent(EleveDAO obj){
+		return((this.Civilite_id == obj.getCivilite_id())
+				&& this.statutEleve.equals(obj.getStatutEleve()));
 	}
 	
 	// Start of user code (user defined methods for AdresseDAO)
@@ -292,77 +237,29 @@ public class AdresseDAO implements InterfaceDb {
 		return this.id;
 	}
 
-	/**
-	 * Sets a value to attribute id. 
-	 * @param newId 
-	 */
-	public void setId(Integer newId) {
-		this.id = newId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	/**
-	 * Returns voie.
-	 * @return voie 
-	 */
-	public String getVoie() {
-		return this.voie;
+	public int getCivilite_id() {
+		return Civilite_id;
 	}
 
-	/**
-	 * Sets a value to attribute voie. 
-	 * @param newVoie 
-	 */
-	public void setVoie(String newVoie) {
-		this.voie = newVoie;
+	public void setCivilite_id(int Civilite_id) {
+		this.Civilite_id = Civilite_id;
 	}
 
-	/**
-	 * Returns ville.
-	 * @return ville 
-	 */
-	public String getVille() {
-		return this.ville;
+	public StatutEleve getStatutEleve() {
+		return statutEleve;
 	}
 
-	/**
-	 * Sets a value to attribute ville. 
-	 * @param newVille 
-	 */
-	public void setVille(String newVille) {
-		this.ville = newVille;
+	public void setStatutEleve(String statut) {
+		try {
+			this.statutEleve = StatutEleve.fromString(statut);
+		} catch (InputValueInvalidException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}
 	}
-
-	/**
-	 * Returns cp.
-	 * @return cp 
-	 */
-	public String getCp() {
-		return this.cp;
-	}
-
-	/**
-	 * Sets a value to attribute cp. 
-	 * @param newCp 
-	 */
-	public void setCp(String newCp) {
-		this.cp = newCp;
-	}
-
-	/**
-	 * Returns telephone.
-	 * @return telephone 
-	 */
-	public String getTelephone() {
-		return this.telephone;
-	}
-
-	/**
-	 * Sets a value to attribute telephone. 
-	 * @param newTelephone 
-	 */
-	public void setTelephone(String newTelephone) {
-		this.telephone = newTelephone;
-	}
-
 
 }

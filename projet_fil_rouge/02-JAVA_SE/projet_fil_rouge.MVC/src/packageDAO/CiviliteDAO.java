@@ -1,83 +1,39 @@
 package packageDAO;
 
-
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashSet;
 
 import packageJDBC.JDBCConnection;
 
-/*******************************************************************************
-
- * 2016, All rights reserved.
- *******************************************************************************/
-
-// Start of user code (user defined imports)
-
-// End of user code
-
-/**
- * Description of AdresseDAO.
- * 
- * @author fabrizzio
- */
-public class AdresseDAO implements InterfaceDb {
-	
-	private static String table = "Adresse";
+public class CiviliteDAO implements InterfaceDb {
+	private static String table = "Civilite";
 	
 	/**
 	 * Description of the property id.
 	 */
 	private Integer id = Integer.valueOf(0);
-
-	/**
-	 * Description of the property voie.
-	 */
-	private String voie = "";
-
-	/**
-	 * Description of the property ville.
-	 */
-	private String ville = "";
-
-	/**
-	 * Description of the property cp.
-	 */
-	private String cp = "";
-
-	/**
-	 * Description of the property telephone.
-	 */
-	private String telephone = "";
-
-	// Start of user code (user defined attributes for AdresseDAO)
-
-	// End of user code
-
-	/**
-	 * 
-	 * @param id
-	 * @param voie
-	 * @param ville
-	 * @param cp
-	 * @param telephone
-	 */
 	
-	public AdresseDAO(String voie, String ville, String cp, String telephone) {
-		setVoie(voie);
-		setVille(ville);
-		setCp(cp);
-		setTelephone(telephone);
+	private String nom, prenom, sexe;
+	
+	private LocalDate date_naiss;
+	
+	public CiviliteDAO(String nom, String prenom, String sexe, Date date_naiss) {
+		setNom(nom);
+		setPrenom(prenom);
+		setSexe(sexe);
+		setDate_naiss(date_naiss.toLocalDate());
 	}
 	
-	private AdresseDAO(Integer id, String voie, String ville, String cp, String telephone) {
-		this(voie, ville, cp, telephone);
+	private CiviliteDAO(Integer id, String nom, String prenom, String sexe, Date date_naiss){
+		this(nom, prenom, sexe, date_naiss);
 		setId(id);
 	}
-
 	/**
 	 * Description of the method dbInsert.
 	 * @return 
@@ -88,17 +44,17 @@ public class AdresseDAO implements InterfaceDb {
 		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "INSERT INTO "+table+" "
-								+"(voie, cp, ville, telephone) "
+								+"(nom, prenom, sexe, date_naiss) "
 								+"VALUES(?,?,?,?)";
 		ResultSet rs;
 		PreparedStatement pstmt;
 		
 		try {
 			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, this.getVoie());
-			pstmt.setString(2, this.getCp());
-			pstmt.setString(3, this.getVille());
-			pstmt.setString(4, this.getTelephone());
+			pstmt.setString(1, this.getNom());
+			pstmt.setString(2, this.getPrenom());
+			pstmt.setString(3, this.getSexe());
+			pstmt.setDate(4, this.getDate_naiss());
 			
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
@@ -123,10 +79,10 @@ public class AdresseDAO implements InterfaceDb {
 	/**
 	 * Description of the method dbSelectFromId.
 	 * @param id 
-	 * @return AdresseDAO
+	 * @return EleveDAO
 	 */
-	public static AdresseDAO dbSelectFromId(int id) {
-		AdresseDAO retObj = null;
+	public static CiviliteDAO dbSelectFromId(int id) {
+		CiviliteDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "SELECT * FROM "+table+" WHERE id="+id;
@@ -138,11 +94,11 @@ public class AdresseDAO implements InterfaceDb {
 			rs = stmt.executeQuery(sql);
 			
 			if (rs.first()){
-				retObj = new AdresseDAO(rs.getInt("id"),
-										rs.getString("voie"),
-										rs.getString("ville"),
-										rs.getString("cp"),
-										rs.getString("telephone"));
+				retObj = new CiviliteDAO(rs.getInt("id"),
+										rs.getString("nom"),
+										rs.getString("prenom"),
+										rs.getString("sexe"),
+										rs.getDate("date_naiss"));
 			}
 			rs.close();
 			stmt.close();
@@ -158,11 +114,11 @@ public class AdresseDAO implements InterfaceDb {
 	
 	/**
 	 * Description of the method dbSelectAll.
-	 * @return HashSet <AdresseDAO>
+	 * @return HashSet <CiviliteDAO>
 	 */
-	public static HashSet <AdresseDAO> dbSelectAll() {
-		HashSet<AdresseDAO> tabAdresse = new HashSet<AdresseDAO>();
-		AdresseDAO retObj = null;
+	public static HashSet <CiviliteDAO> dbSelectAll() {
+		HashSet<CiviliteDAO> tabCivilite = new HashSet<CiviliteDAO>();
+		CiviliteDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "SELECT * FROM "+table;
@@ -174,12 +130,11 @@ public class AdresseDAO implements InterfaceDb {
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
 				while(rs.next()){
-					retObj = new AdresseDAO(rs.getInt("id"),
-											rs.getString("voie"),
-											rs.getString("ville"),
-											rs.getString("cp"),
-											rs.getString("telephone"));
-					tabAdresse.add(retObj);
+					retObj = new CiviliteDAO(rs.getInt("id"),
+											rs.getString("nom"),
+											rs.getString("prenom"),
+											rs.getString("sexe"),
+											rs.getDate("date_naiss"));
 				}
 			}
 			rs.close();
@@ -189,7 +144,7 @@ public class AdresseDAO implements InterfaceDb {
 			e.printStackTrace();
 		}
 		
-		return tabAdresse;
+		return tabCivilite;
 		// Start of user code for method dbSelectFromId
 		// End of user code
 	}
@@ -229,15 +184,15 @@ public class AdresseDAO implements InterfaceDb {
 		int updateRowCount = 0;
 		Connection conn = JDBCConnection.getInstance();
 		
-		String sql = "UPDATE "+table+" SET voie=?, cp=?, ville=?, telephone=? WHERE id="+getId();
+		String sql = "UPDATE "+table+" SET nom=?, prenom=?, sexe=?, date_naiss=? WHERE id="+getId();
 		
 		PreparedStatement pstmt;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, this.getVoie());
-			pstmt.setString(2, this.getCp());
-			pstmt.setString(3, this.getVille());
-			pstmt.setString(4, this.getTelephone());
+			pstmt.setString(1, this.getNom());
+			pstmt.setString(2, this.getPrenom());
+			pstmt.setString(3, this.getSexe());
+			pstmt.setDate(4, this.getDate_naiss());
 			updateRowCount = pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -274,95 +229,51 @@ public class AdresseDAO implements InterfaceDb {
 		return retBool;
 	}
 	
-	public boolean hasSameContent(AdresseDAO obj){
-		return(this.ville.equals(obj.getVille())
-				&& this.cp.equals(obj.getCp())
-				&& this.voie.equals(obj.getVoie())
-				&& this.telephone.equals(obj.getTelephone()));
+	public boolean hasSameContent(CiviliteDAO obj){
+		return(this.nom.equals(obj.getNom())
+				&& this.prenom.equals(obj.getPrenom())
+				&& this.sexe.equals(obj.getSexe())
+				&& this.date_naiss.equals(obj.getDate_naiss().toLocalDate()));
 	}
-	
-	// Start of user code (user defined methods for AdresseDAO)
 
-	// End of user code
-	/**
-	 * Returns id.
-	 * @return id 
-	 */
 	public Integer getId() {
-		return this.id;
+		return id;
 	}
 
-	/**
-	 * Sets a value to attribute id. 
-	 * @param newId 
-	 */
-	public void setId(Integer newId) {
-		this.id = newId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	/**
-	 * Returns voie.
-	 * @return voie 
-	 */
-	public String getVoie() {
-		return this.voie;
+	public String getNom() {
+		return nom;
 	}
 
-	/**
-	 * Sets a value to attribute voie. 
-	 * @param newVoie 
-	 */
-	public void setVoie(String newVoie) {
-		this.voie = newVoie;
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 
-	/**
-	 * Returns ville.
-	 * @return ville 
-	 */
-	public String getVille() {
-		return this.ville;
+	public String getPrenom() {
+		return prenom;
 	}
 
-	/**
-	 * Sets a value to attribute ville. 
-	 * @param newVille 
-	 */
-	public void setVille(String newVille) {
-		this.ville = newVille;
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
 	}
 
-	/**
-	 * Returns cp.
-	 * @return cp 
-	 */
-	public String getCp() {
-		return this.cp;
+	public String getSexe() {
+		return sexe;
 	}
 
-	/**
-	 * Sets a value to attribute cp. 
-	 * @param newCp 
-	 */
-	public void setCp(String newCp) {
-		this.cp = newCp;
+	public void setSexe(String sexe) {
+		this.sexe = sexe;
 	}
 
-	/**
-	 * Returns telephone.
-	 * @return telephone 
-	 */
-	public String getTelephone() {
-		return this.telephone;
+	public Date getDate_naiss() {
+		return Date.valueOf(this.date_naiss);
 	}
 
-	/**
-	 * Sets a value to attribute telephone. 
-	 * @param newTelephone 
-	 */
-	public void setTelephone(String newTelephone) {
-		this.telephone = newTelephone;
+	public void setDate_naiss(LocalDate date_naiss) {
+		this.date_naiss = date_naiss;
 	}
-
 
 }
