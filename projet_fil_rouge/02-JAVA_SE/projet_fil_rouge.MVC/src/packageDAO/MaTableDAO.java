@@ -6,10 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import packageAppli.MaTable;
-import packageJDBC.JDBCConnection;
+import packageException.InputValueInvalidException;
+import packageException.InputValueTooLongException;
 
 /**
  * 
@@ -20,7 +21,7 @@ import packageJDBC.JDBCConnection;
  */
 public class MaTableDAO extends DAO<MaTable>
 {
-	private final String table = "TestTable";
+	private static final String table = "TestTable";
 
 	//************************************************************************
 	//** CONSTRUCTORS
@@ -39,7 +40,7 @@ public class MaTableDAO extends DAO<MaTable>
 	//************************************************************************
 	//** GETTERS SETTERS
 	//************************************************************************
-
+	
 	public String getTable()
 	{
 		return table;
@@ -69,14 +70,14 @@ public class MaTableDAO extends DAO<MaTable>
 			rs = stmt.executeQuery(sql);
 			while(rs.next())
 			{
-				retObj = new MaTable (rs.getInt("id"), 
-												rs.getString("name"),
-												rs.getDate("date").toLocalDate());
+				retObj = new MaTable ( rs.getInt("id"), 
+										rs.getString("name"),
+										rs.getDate("date").toLocalDate());
 			}
 			rs.close();
 			stmt.close();
 		} 
-		catch (SQLException e) {
+		catch (SQLException | InputValueTooLongException | InputValueInvalidException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -85,11 +86,11 @@ public class MaTableDAO extends DAO<MaTable>
 	
 	/**
 	 * Description of the method dbSelectAll
-	 * @return Vector <MaTableDAO> 
+	 * @return ArrayList <MaTableDAO> 
 	 */
-	public Vector <MaTable> dbSelectAll()
+	public ArrayList <MaTable> dbSelectAll()
 	{
-		Vector <MaTable> retObj = new Vector<MaTable>();
+		ArrayList <MaTable> retObj = new ArrayList<MaTable>();
 
 		String sql = "SELECT * FROM "+ table + " ORDER BY id ASC";
 		Statement stmt = null;
@@ -100,15 +101,15 @@ public class MaTableDAO extends DAO<MaTable>
 			rs = stmt.executeQuery(sql);
 			while(rs.next())
 			{
-				MaTable obj = new MaTable	(rs.getInt("id"), 
-												rs.getString("nom"),
-												rs.getDate("date").toLocalDate());
+				MaTable obj = new MaTable ( rs.getInt("id"), 
+											rs.getString("nom"),
+											rs.getDate("date").toLocalDate());
 				retObj.add(obj);
 			}
 			rs.close();
 			stmt.close();
 		} 
-		catch (SQLException e) {
+		catch (SQLException | InputValueTooLongException | InputValueInvalidException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -120,8 +121,10 @@ public class MaTableDAO extends DAO<MaTable>
 	 * 
 	 * - pour éviter des injections dans les requêtes, on spécifie le retour attendu dans ?
 	 * 
+	 * @throws InputValueInvalidException 
+	 * 
 	 */
-	public boolean dbInsert(MaTable obj){
+	public boolean dbInsert(MaTable obj) throws InputValueInvalidException{
 
 		boolean ret = false;
 

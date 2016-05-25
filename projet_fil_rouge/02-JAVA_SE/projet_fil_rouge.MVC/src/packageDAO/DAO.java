@@ -1,6 +1,10 @@
 package packageDAO;
 
+import java.util.ArrayList;
 import java.util.Vector;
+
+import packageAppli.MaTable;
+import packageException.InputValueInvalidException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,7 +28,6 @@ import packageJDBC.JDBCConnection;
 public abstract class DAO <T> {
 	// Start of user code (user defined attributes for DAO)
 	Connection conn;
-	private String table;
 
 	// End of user code
 
@@ -123,8 +126,9 @@ public abstract class DAO <T> {
 	/**
 	 * Description of the method dbInsert.
 	 * @return 
+	 * @throws InputValueInvalidException 
 	 */
-	public abstract boolean dbInsert(T obj);
+	public abstract boolean dbInsert(T obj) throws InputValueInvalidException;
 
 	/**
 	 * Description of the method dbSelectFromId.
@@ -137,7 +141,7 @@ public abstract class DAO <T> {
 	 * Description of the method dbSelectAll.
 	 * @return 
 	 */
-	public abstract Vector <T> dbSelectAll();
+	public abstract ArrayList<MaTable> dbSelectAll();
 
 	/**
 	 * Description of the method dbUpdate.

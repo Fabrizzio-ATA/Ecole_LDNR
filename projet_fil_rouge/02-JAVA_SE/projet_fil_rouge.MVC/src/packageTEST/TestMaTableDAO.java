@@ -14,6 +14,8 @@ import org.junit.Test;
 
 import packageAppli.MaTable;
 import packageDAO.MaTableDAO;
+import packageException.InputValueInvalidException;
+import packageException.InputValueTooLongException;
 
 public class TestMaTableDAO {
 	
@@ -42,19 +44,31 @@ public class TestMaTableDAO {
 	 */
 	private MaTable dbInsertNewValidObj(){
 		MaTable obj = newValidObj();
-		if(dao_obj.dbInsert(obj)){
-			tabIdToDelete.add(obj.getId());
+		try {
+			if(dao_obj.dbInsert(obj)){
+				tabIdToDelete.add(obj.getId());
+			}
+		} catch (InputValueInvalidException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.out.println("id "+obj.getId()+" : à été creer lors de la création de l'objet valide avec insertion");
+		System.out.println("id "+obj.getId()+" : à été créé lors de la création de l'objet valide avec insertion");
 		return obj;
 	}
 	
+	
 	@Test
 	public void testDbInsert() {
+		System.out.println("Test dbInsert sur la table : " + dao_obj.getTable());
 		MaTable obj = newValidObj();
 
 		//test de l'insertion
-		assertTrue("test insertion", dao_obj.dbInsert(obj));
+		try {
+			assertTrue("test insertion", dao_obj.dbInsert(obj));
+		} catch (InputValueInvalidException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		int id = obj.getId();
 		assertTrue("Test résultat d'insertion", id>0);
@@ -70,11 +84,11 @@ public class TestMaTableDAO {
 		MaTable obj = dbInsertNewValidObj();
 		MaTable obj2 = dao_obj.dbSelectFromId(obj.getId());
 		
-		System.out.println("id "+obj.getId()+" : à été creer lors du test DbSelectFromId");
+		System.out.println("id "+obj.getId()+" : à été créé lors du test DbSelectFromId");
 		//Vérification de la création d'objet
 		assertNotNull("test si le select n'est pas null", obj2);
 		
-		//L'objet récuperer par le select correspond bien à l'objet inséré
+		//L'objet récuperé par le select correspond bien à l'objet inséré
 		assertTrue("test du select par id", obj.hasSameContent(obj2));
 	}
 	
@@ -96,7 +110,12 @@ public class TestMaTableDAO {
 		assertFalse("Test d'update sur un enregistrement inexistant", dao_obj.dbUpdate(obj));
 		
 		MaTable obj2 = dbInsertNewValidObj();
-		obj2.setName("Updated");
+		try {
+			obj2.setName("Updated");
+		} catch (InputValueTooLongException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//Test d'update sur un enregistrement existant
 		//Doit renvoyer true
 		assertTrue("Test d'update sur un enregistrement existant", dao_obj.dbUpdate(obj2));
