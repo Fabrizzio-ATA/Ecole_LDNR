@@ -7,6 +7,9 @@
 <title>VUE Civilite</title>
 </head>
 <body>
+	<%-- Affichage de la chaîne "message" transmise par la servlet --%>
+	<p class="info"> ${ requestScope.message }</p>
+	
 	<p>	Civilite: </p>
 	NOM :  ${ requestScope.civilite.nom }<br>
 	Penom :${ requestScope.civilite.prenom }<br>

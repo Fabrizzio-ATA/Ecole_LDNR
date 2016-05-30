@@ -7,6 +7,9 @@
 <title>VUE Adresse</title>
 </head>
 <body>
+	<%-- Affichage de la chaîne "message" transmise par la servlet --%>
+	<p class="info"> $ {requestScope.message }</p>
+	
 	<p> Adresse: </p>
 	VOIE : ${ requestScope.adresse.voie }<br>
 	CP   : ${ requestScope.adresse.codePostal }<br>

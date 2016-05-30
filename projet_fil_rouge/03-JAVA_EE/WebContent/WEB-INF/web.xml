@@ -12,9 +12,16 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+	
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<include-prelude>/WEB-INF/taglib.jsp</include-prelude>
+		</jsp-property-group>
+	</jsp-config>
 
 	<servlet>
-		<description> Projet Fil rouge - ServletAdresse </description>
+		<description> Projet Fil rouge - Controleur formulaire Adresse </description>
 		<servlet-name>ServletAdresse</servlet-name>
 		<servlet-class>servlets.ServletAdresse</servlet-class>
 		<init-param>
@@ -26,7 +33,7 @@
 	</servlet>
 
 	<servlet>
-		<description> Projet Fil rouge - ServletCivilite</description>
+		<description> Projet Fil rouge - Controleur formulaire Civilite</description>
 		<servlet-name>ServletCivilite</servlet-name>
 		<servlet-class>servlets.ServletCivilite</servlet-class>
 		<init-param>
