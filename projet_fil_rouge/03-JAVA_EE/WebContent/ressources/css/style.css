@@ -1,0 +1,125 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.clear{clear: both;}
+ul {list-style: none;}
+
+body{
+    padding: 0;
+    background-color: #bac1e8;
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+}
+
+header {
+    
+    background-color: #444759;
+    height: 100px;
+    color: #fff;
+    padding: 15px;
+}
+header h1{
+    font-size: 3em;
+    margin: 22px 0;
+    text-align: left;
+}
+
+header img {
+    position: absolute;
+    right: 0px;
+    top: -10px;
+}
+
+footer {
+    background-color: #666978;
+    padding: 15px;
+    color: #fff;
+}
+footer ul li {
+    display: inline-block;
+    font-size: 1em;
+}
+
+nav{
+    background-color: #444759;
+    color: #fff;
+    margin-top: 15px !important;
+    border-radius: 5px;
+}
+
+nav ul {
+    line-height: 48px;
+}
+nav ul li {
+    display: inline-block;
+    color: #fff;
+    font-size: 1.5em;
+}
+
+ul li {
+  position: relative;
+  -webkit-transform: translateZ(0);
+  /** To avoid a flash when hover messages **/
+}
+
+nav ul>li>a {
+    padding: 0 20px;
+    display: block;
+    line-height: 45px;
+    transition: background .3s;
+    text-decoration: none;
+    color: inherit;
+}
+
+nav ul>li>a:hover {
+  background: #666978;
+  border-bottom: 4px solid #1ACACE;
+  text-decoration: none;
+}
+
+nav button {
+   top: 10px;
+    right: 15px;
+    position: absolute;
+    background: #1ACACE;
+    display: block;
+    width: 175px;
+    line-height: 30px;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    transition: background .3s;
+    border: none;
+}
+
+nav button:hover{
+    background: #0F9295;
+}
+
+main {
+    padding: 15px;
+}
+
+.centrer{
+    width: 75%;
+    margin: auto;
+     position: relative;
+}

@@ -3,10 +3,6 @@ package packageException;
 
 public class InputValueInvalidException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1477511285936442544L;
 
 	public InputValueInvalidException(String message) {
 		super(message);
