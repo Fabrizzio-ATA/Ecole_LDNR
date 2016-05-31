@@ -13,16 +13,21 @@ import beans.AdresseWEB;;
 public class ServletAdresse extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final String CHAMP_CP = "codePostal";
+	private static final String CHAMP_VOIE = "voie";
+	private static final String CHAMP_VILLE = "ville";
 
 	public void doGet( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		/* Lit les données de la requête et enlève les espaces (trim)*/
-		String cp = request.getParameter("codePostal").trim();
-		String voie = request.getParameter("voie").trim();
-		String ville = request.getParameter("ville");
+		String cp = request.getParameter(CHAMP_CP).trim();
+		String voie = request.getParameter(CHAMP_VOIE).trim();
+		String ville = request.getParameter(CHAMP_VILLE).trim();
         
 		/* Une String pour passer un message à la vue */
         String msg = null;
+        /* Un booleen pour préciser si il y a une erreur */
+        boolean isError = true;
         
 		// Création et initialisation du Bean
 		AdresseWEB adresse = new AdresseWEB();
@@ -44,18 +49,21 @@ public class ServletAdresse extends HttpServlet {
 		}
 		else {
             msg = "Adresse correctement créée.";
-            
-    		adresse.setCodePostal(cp);
-    		adresse.setVoie(voie);
-    		adresse.setVille(ville);
+            isError = false;
         }
+		
+        // On doit remplir le bean pour permettre la modification du formulaire par l'utilisateur
+		adresse.setCodePostal(cp);
+		adresse.setVoie(voie);
+		adresse.setVille(ville);
 
 		// Ajout de l'attribut dans la requete pour le modele ou la vue
 		request.setAttribute( "adresse", adresse);
 		request.setAttribute( "message", msg );
+		request.setAttribute("iserror", isError);
 		
 		// La servlet propage la requete à la VUE (page JSP)
-		this.getServletContext().getRequestDispatcher( "/WEB-INF/JSPAdresse.jsp").
+		this.getServletContext().getRequestDispatcher( "/WEB-INF/AfficherAdresse.jsp").
 				forward( request, response );
 	}
 	
