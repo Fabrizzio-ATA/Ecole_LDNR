@@ -118,8 +118,27 @@ main {
     padding: 15px;
 }
 
+/* Styles et couleurs -------------------------------------------------------------------------- */
+
 .centrer{
     width: 75%;
     margin: auto;
      position: relative;
+}
+
+.requis {
+	color: #c00;
+}
+
+.erreur {
+	color: #900;
+}
+
+.succes {
+	color: #090;
+}
+
+.info {
+	font-style: italic;
+	color: #E8A22B;
 }

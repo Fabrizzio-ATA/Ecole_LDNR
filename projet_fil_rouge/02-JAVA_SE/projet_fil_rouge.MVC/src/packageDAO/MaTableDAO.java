@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import packageAppli.MaTable;
+import packageORM.MaTable;
 import packageException.InputValueInvalidException;
 import packageException.InputValueTooLongException;
 

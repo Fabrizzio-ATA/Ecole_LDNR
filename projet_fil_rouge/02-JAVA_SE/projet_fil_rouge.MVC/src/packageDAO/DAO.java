@@ -3,7 +3,7 @@ package packageDAO;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import packageAppli.MaTable;
+import packageORM.MaTable;
 import packageException.InputValueInvalidException;
 
 import java.sql.Connection;
@@ -24,6 +24,10 @@ import packageJDBC.JDBCConnection;
  * Description of DAO.
  * 
  * @author fabrizzio
+ * 
+ * Cette classe abstraite permet (bien mieux qu'une interface) de spécifier les méthodes et constructeurs génériques des classes DAO.
+ * Le constructeur s'occupe de définir la connection (implicite ou explicite) stockée en attribut (qui pourrait être protected).
+ * 
  */
 public abstract class DAO <T> {
 	// Start of user code (user defined attributes for DAO)
@@ -67,7 +71,6 @@ public abstract class DAO <T> {
 	public boolean dbExistFromId(Integer id) {
 		// Start of user code for method dbExistFromId
 		boolean retBool = false; 
-		Connection conn = JDBCConnection.getInstance();
 		
 		String sql = "SELECT * FROM "+this.getTable()+" WHERE id="+id;
 		ResultSet rs = null;
@@ -100,9 +103,7 @@ public abstract class DAO <T> {
 		// Start of user code for method dbDeleteFromId
 		// Start of user code for method dbDeleteFromId
 		boolean dbDeleteFromId = false;
-		
-		Connection conn = JDBCConnection.getInstance();
-		
+				
 		String sql = "DELETE FROM "+this.getTable()+" WHERE id="+id;
 		Statement stmt = null;
 		

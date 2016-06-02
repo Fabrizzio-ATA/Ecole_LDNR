@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.AfterClass;
 import org.junit.Test;
 
-import packageAppli.MaTable;
+import packageORM.MaTable;
 import packageDAO.MaTableDAO;
 import packageException.InputValueInvalidException;
 import packageException.InputValueTooLongException;
