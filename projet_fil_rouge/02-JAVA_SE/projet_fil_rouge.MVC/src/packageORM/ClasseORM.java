@@ -3,10 +3,11 @@ import java.util.ArrayList;
 
 import packageDAO.ClasseDAO;
 import packageDAO.EleveDAO;
+import packageDAO.Eleve_has_ClasseDAO;
 import packageDAO.EnseignantDAO;
 import packageException.InputValueTooLongException;
 
-public class ClasseORM implements InterfaceORM<ClasseORM> {
+public class ClasseORM {
 	
 	/**
 	 *  Attributs
@@ -20,16 +21,16 @@ public class ClasseORM implements InterfaceORM<ClasseORM> {
 	
 	private String niveau;
 	
-	private EnseignantDAO enseignant;
+	private EnseignantORM enseignant;
 	
-	private ArrayList <EleveDAO> tabEleves;
+	private ArrayList <EleveORM> tabEleves;
 
 	/**
 	 *  Constructeurs
 	 */
 	
-	public ClasseORM(String nom, String periode, String niveau, EnseignantDAO enseignant,
-			ArrayList<EleveDAO> tabEleves) {
+	private ClasseORM(String nom, String periode, String niveau, EnseignantORM enseignant,
+			ArrayList<EleveORM> tabEleves) {
 		super();
 		this.setNom(nom);
 		this.setPeriode(periode);
@@ -38,8 +39,8 @@ public class ClasseORM implements InterfaceORM<ClasseORM> {
 		this.setTabEleves(tabEleves);
 	}
 	
-	public ClasseORM(Integer id, String nom, String periode, String niveau, EnseignantDAO enseignant,
-			ArrayList<EleveDAO> tabEleves) {
+	private ClasseORM(Integer id, String nom, String periode, String niveau, EnseignantORM enseignant,
+			ArrayList<EleveORM> tabEleves) {
 		this (nom,periode,niveau,enseignant,tabEleves);
 		this.setId(id);
 	}
@@ -56,44 +57,55 @@ public class ClasseORM implements InterfaceORM<ClasseORM> {
 	 * 	// obj.getEnseignant().hasSameContent(EnseignantDAO.dbSelectFromId(obj.getEnseignant().getId()));
 	 * 	NOTE : Pas besoin de s'occuper des élèves à la création
 	 */
-	@Override
-	public boolean create(ClasseORM obj) throws InputValueTooLongException {
+
+	public static boolean create(String nom, String periode, String niveau, EnseignantORM enseignant, ArrayList<EleveORM> tabEleves) {
+		
 		
 		boolean ret = false;
+		
+		ClasseORM obj = new ClasseORM(nom, periode, niveau, enseignant, null);
 	
 		// Créer la classe DAO de l'objet courant en récupérant les id des objets précédents
-		ClasseDAO objDAO = new ClasseDAO(obj.getNom(),obj.getNiveau(),obj.getPeriode(),obj.getEnseignant().getId());
-		
-		// Insérer la classe dans la base de données
-		ret = objDAO.dbInsert();
+		ClasseDAO objDAO;
+		try {
+			objDAO = new ClasseDAO(obj.getNom(),obj.getNiveau(),obj.getPeriode(),obj.getEnseignant().getId());
+			//TODO EnseignantORM.getID()
+			
+			// Insérer la classe dans la base de données
+			ret = objDAO.dbInsert();
+		} catch (InputValueTooLongException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
+		}
 		
 		return ret;
 	}
 
 	//@Override
 	public static ClasseORM read(Integer id) {
-
-		ClasseORM obj;
-
 		// Récupérer l'objet DAO correspondant:
 		ClasseDAO objDAO = ClasseDAO.dbSelectFromId(id);
-		// TODO Récupérer le tableau d'élèves
-		ArrayList<EleveDAO> tabEleves = new ArrayList<EleveDAO>();
-//		for (EleveDAO eleve : EleveHasClasse.getElevesFromClasse())
-//		{
-//			tabEleves.add(eleve);
-//		}
+		// Récupérer le tableau d'élèves
+		ArrayList<EleveORM> tabEleves = ClasseORM.getElevesFromClasse(id);
 		
-		// Compléter l'objet courant avec les valeurs trouvées en base
-		obj = new ClasseORM(objDAO.getId(),
+		EnseignantORM enseignant = null;
+		// TODO enseignant = new EnseignantORM.read(objDAO.getEnseignant_id());
+		
+		// Creer un obj ClasseORM avec les valeurs trouvées en base
+		ClasseORM obj = new ClasseORM(objDAO.getId(),
 								objDAO.getNom(),
 								objDAO.getPeriode(),
 								objDAO.getNiveau().toString(),
-								EnseignantDAO.dbSelectFromId(objDAO.getEnseignant_id()),
+								enseignant,
 								tabEleves
 								);
 		
 		return obj;
+	}
+
+	private static ArrayList<EleveORM> getElevesFromClasse(Integer id2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	//@Override
@@ -102,21 +114,30 @@ public class ClasseORM implements InterfaceORM<ClasseORM> {
 		return null;
 	}
 
-	@Override
-	public boolean update(ClasseORM obj) {
-		// TODO Auto-generated method stub
-		for (EleveDAO eleve : obj.getTabEleves())
-		{
-			// TODO associer les élèves à la table de liaison Eleve_has_Classe
+	public static boolean update(String nom, String periode, String niveau, EnseignantORM enseignant) {
+		
+		boolean ret = false;
+		
+		ClasseORM obj = new ClasseORM(nom, periode, niveau, enseignant, null);
+	
+		// Créer la classe DAO de l'objet courant en récupérant les id des objets précédents
+		try {
+			ClasseDAO objDAO = new ClasseDAO(obj.getNom(),obj.getNiveau(),obj.getPeriode(),obj.getEnseignant().getId());
+		} catch (InputValueTooLongException e) {
+			// TODO Auto-generated catch block
+			e.getMessage();
 		}
 		
-		return false;
+		return ret;
 	}
 
-	// TODO pourquoi enlever @Override
+	//@Override
 	public static boolean delete(Integer id) {
-		// TODO Auto-generated method stub
-		return true;
+		boolean ret = false;
+		
+		Eleve_has_ClasseDAO.dbDeleteFromIdClasse(id);
+		ClasseDAO.dbDeleteFromId(id);
+		return ret;
 	}
 
 	
@@ -157,19 +178,19 @@ public class ClasseORM implements InterfaceORM<ClasseORM> {
 		this.niveau = niveau2;
 	}
 
-	public EnseignantDAO getEnseignant() {
+	public EnseignantORM getEnseignant() {
 		return enseignant;
 	}
 
-	public void setEnseignant(EnseignantDAO enseignant) {
+	public void setEnseignant(EnseignantORM enseignant) {
 		this.enseignant = enseignant;
 	}
 
-	public ArrayList<EleveDAO> getTabEleves() {
+	public ArrayList<EleveORM> getTabEleves() {
 		return tabEleves;
 	}
 
-	public void setTabEleves(ArrayList<EleveDAO> tabEleves) {
+	public void setTabEleves(ArrayList<EleveORM> tabEleves) {
 		this.tabEleves = tabEleves;
 	}
 }

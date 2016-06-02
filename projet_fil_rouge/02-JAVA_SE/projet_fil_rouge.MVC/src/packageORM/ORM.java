@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import packageException.InputValueTooLongException;
 
-public interface InterfaceORM <T> {
+public abstract class ORM {
 	
 	/**
 	 *  COMMON METHODS
@@ -12,18 +12,17 @@ public interface InterfaceORM <T> {
 	
 	/**
 	 * Méthode create
-	 * @param obj
 	 * @return true if object is created
 	 * @throws InputValueTooLongException 
 	 * 
 	 */
-	public abstract boolean create(T obj) throws InputValueTooLongException;
-	
+	public static boolean create() throws InputValueTooLongException {
+		return false;
+	}
 	/**
 	 * Méthode read (1 value)
 	 * @param id
-	 * @return the objet referenced by id 
-	 * TODO return if error (default null)
+	 * @return true if insert successfull
 	 */
 	public static Object read(Integer id)
 	{
@@ -44,7 +43,9 @@ public interface InterfaceORM <T> {
 	 * @param obj
 	 * @return true if update successfull
 	 */
-	public abstract boolean update(T obj);
+	public static boolean update() {
+		return false;
+	}
 	
 	/**
 	 * 

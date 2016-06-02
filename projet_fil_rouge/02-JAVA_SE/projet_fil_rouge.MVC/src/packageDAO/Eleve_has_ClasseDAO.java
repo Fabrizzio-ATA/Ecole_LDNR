@@ -305,5 +305,10 @@ public class Eleve_has_ClasseDAO implements InterfaceDb {
 		this.id_Classe = id_Classe;
 	}
 
+	public static void dbDeleteFromIdClasse(Integer id2) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }
