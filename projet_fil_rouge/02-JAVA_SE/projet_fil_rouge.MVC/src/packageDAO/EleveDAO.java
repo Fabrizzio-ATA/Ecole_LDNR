@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import packageException.InputValueInvalidException;
 import packageJDBC.JDBCConnection;
@@ -111,8 +111,8 @@ public class EleveDAO implements InterfaceDb {
 	 * Description of the method dbSelectAll.
 	 * @return HashSet <EleveDAO>
 	 */
-	public static HashSet <EleveDAO> dbSelectAll() {
-		HashSet<EleveDAO> tabEleve = new HashSet<EleveDAO>();
+	public static ArrayList <EleveDAO> dbSelectAll() {
+		ArrayList<EleveDAO> tabEleve = new ArrayList<EleveDAO>();
 		EleveDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		

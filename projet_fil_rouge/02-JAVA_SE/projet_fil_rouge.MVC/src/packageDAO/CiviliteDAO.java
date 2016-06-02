@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import packageJDBC.JDBCConnection;
 
@@ -114,10 +114,10 @@ public class CiviliteDAO implements InterfaceDb {
 	
 	/**
 	 * Description of the method dbSelectAll.
-	 * @return HashSet <CiviliteDAO>
+	 * @return ArrayList <CiviliteDAO>
 	 */
-	public static HashSet <CiviliteDAO> dbSelectAll() {
-		HashSet<CiviliteDAO> tabCivilite = new HashSet<CiviliteDAO>();
+	public static ArrayList <CiviliteDAO> dbSelectAll() {
+		ArrayList<CiviliteDAO> tabCivilite = new ArrayList<CiviliteDAO>();
 		CiviliteDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		
@@ -135,6 +135,7 @@ public class CiviliteDAO implements InterfaceDb {
 											rs.getString("prenom"),
 											rs.getString("sexe"),
 											rs.getDate("date_naiss"));
+					tabCivilite.add(retObj);
 				}
 			}
 			rs.close();

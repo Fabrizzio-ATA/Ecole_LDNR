@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import packageException.InputValueInvalidException;
 import packageException.InputValueTooLongException;
@@ -120,10 +120,10 @@ public class ClasseDAO implements InterfaceDb {
 	
 	/**
 	 * Description of the method dbSelectAll.
-	 * @return HashSet <EnseignantDAO>
+	 * @return ArrayList <EnseignantDAO>
 	 */
-	public static HashSet <ClasseDAO> dbSelectAll() {
-		HashSet<ClasseDAO> tabCivilite = new HashSet<ClasseDAO>();
+	public static ArrayList <ClasseDAO> dbSelectAll() {
+		ArrayList<ClasseDAO> tabClasse = new ArrayList<ClasseDAO>();
 		ClasseDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		
@@ -141,6 +141,7 @@ public class ClasseDAO implements InterfaceDb {
 											rs.getString("niveau"),
 											rs.getString("periode"),
 											rs.getInt("Enseignant_id"));
+					tabClasse.add(retObj);
 				}
 			}
 			rs.close();
@@ -150,7 +151,7 @@ public class ClasseDAO implements InterfaceDb {
 			e.printStackTrace();
 		}
 		
-		return tabCivilite;
+		return tabClasse;
 		// Start of user code for method dbSelectFromId
 		// End of user code
 	}

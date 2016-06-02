@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import packageJDBC.JDBCConnection;
 
@@ -137,10 +137,10 @@ public class Eleve_has_ClasseDAO implements InterfaceDb {
 	
 	/**
 	 * Description of the method dbSelectAll.
-	 * @return HashSet <Eleve_has_ClasseDAO>
+	 * @return ArrayList <Eleve_has_ClasseDAO>
 	 */
-	public static HashSet <Eleve_has_ClasseDAO> dbSelectAll() {
-		HashSet<Eleve_has_ClasseDAO> tabEleve_has_Classe = new HashSet<Eleve_has_ClasseDAO>();
+	public static ArrayList <Eleve_has_ClasseDAO> dbSelectAll() {
+		ArrayList<Eleve_has_ClasseDAO> tabEleve_has_Classe = new ArrayList<Eleve_has_ClasseDAO>();
 		Eleve_has_ClasseDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		

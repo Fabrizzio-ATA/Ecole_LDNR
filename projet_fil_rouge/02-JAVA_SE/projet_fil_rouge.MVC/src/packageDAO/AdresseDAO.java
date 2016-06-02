@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import packageJDBC.JDBCConnection;
 
@@ -158,10 +158,10 @@ public class AdresseDAO implements InterfaceDb {
 	
 	/**
 	 * Description of the method dbSelectAll.
-	 * @return HashSet <AdresseDAO>
+	 * @return ArrayList <AdresseDAO>
 	 */
-	public static HashSet <AdresseDAO> dbSelectAll() {
-		HashSet<AdresseDAO> tabAdresse = new HashSet<AdresseDAO>();
+	public static ArrayList <AdresseDAO> dbSelectAll() {
+		ArrayList<AdresseDAO> tabAdresse = new ArrayList<AdresseDAO>();
 		AdresseDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		

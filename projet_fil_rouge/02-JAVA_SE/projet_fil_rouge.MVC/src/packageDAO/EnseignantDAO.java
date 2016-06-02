@@ -1,13 +1,11 @@
 package packageDAO;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import packageJDBC.JDBCConnection;
 
@@ -109,10 +107,10 @@ public class EnseignantDAO implements InterfaceDb {
 	
 	/**
 	 * Description of the method dbSelectAll.
-	 * @return HashSet <EnseignantDAO>
+	 * @return ArrayList <EnseignantDAO>
 	 */
-	public static HashSet <EnseignantDAO> dbSelectAll() {
-		HashSet<EnseignantDAO> tabCivilite = new HashSet<EnseignantDAO>();
+	public static ArrayList <EnseignantDAO> dbSelectAll() {
+		ArrayList<EnseignantDAO> tabEnseignant = new ArrayList<EnseignantDAO>();
 		EnseignantDAO retObj = null;
 		Connection conn = JDBCConnection.getInstance();
 		
@@ -129,6 +127,7 @@ public class EnseignantDAO implements InterfaceDb {
 												rs.getInt("Civilite_id"),
 												rs.getInt("Adresse_id"),
 												rs.getInt("Utilisateur_id"));
+					tabEnseignant.add(retObj);
 				}
 			}
 			rs.close();
@@ -138,7 +137,7 @@ public class EnseignantDAO implements InterfaceDb {
 			e.printStackTrace();
 		}
 		
-		return tabCivilite;
+		return tabEnseignant;
 		// Start of user code for method dbSelectFromId
 		// End of user code
 	}
