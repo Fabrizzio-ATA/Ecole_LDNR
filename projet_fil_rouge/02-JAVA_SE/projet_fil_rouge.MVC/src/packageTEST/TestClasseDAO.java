@@ -41,7 +41,7 @@ public class TestClasseDAO {
 	 * 
 	 * @return un objet valide mis en base de données
 	 */
-	private static ClasseDAO dbInsertNewValidObj(){
+	protected static ClasseDAO dbInsertNewValidObj(){
 		ClasseDAO obj=null;
 		try {
 			obj = newValidObj();
@@ -53,7 +53,7 @@ public class TestClasseDAO {
 		if(obj.dbInsert()){
 			tabIdToDelete.add(obj.getId());
 		}
-		System.out.println("id "+obj.getId()+" : à été creer lors de la création de l'objet valide avec insertion");
+		System.out.println("id "+obj.getId()+" : à été creer lors de la création de l'objet valide Classe avec insertion");
 		
 		return obj;
 		

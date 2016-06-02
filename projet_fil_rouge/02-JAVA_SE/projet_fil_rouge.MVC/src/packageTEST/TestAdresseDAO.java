@@ -34,12 +34,12 @@ public class TestAdresseDAO {
 	 * 
 	 * @return un objet valide mis en base de données
 	 */
-	private static AdresseDAO dbInsertNewValidObj(){
+	protected static AdresseDAO dbInsertNewValidObj(){
 		AdresseDAO obj = newValidObj();
 		if(obj.dbInsert()){
 			tabIdToDelete.add(obj.getId());
 		}
-		System.out.println("id "+obj.getId()+" : à été creer lors de la création de l'objet valide avec insertion");
+		System.out.println("id "+obj.getId()+" : à été creer lors de la création de l'objet valide Adresse avec insertion");
 		return obj;
 	}
 	

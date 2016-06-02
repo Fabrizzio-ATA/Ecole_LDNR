@@ -20,7 +20,7 @@ public class JDBCConnection {
 	
 	// L'URL de ma DB à contacter
 	//		static final String DB_URL = "jdbc:mysql://localhost:3306/stag";
-	static final String DB_URL = "jdbc:mysql://82.229.232.36:3306/db_ecole_test";	
+	static final String DB_URL = "jdbc:mysql://82.229.232.36:3306/db_ecole_v6";	
 	
 	// Mes paramètres de connexion
 	// Il faut passer par des propriétés
@@ -91,69 +91,4 @@ public class JDBCConnection {
 			se.printStackTrace();
 		}
 	}
-		
-//	public static void main(String[] args) 
-//	{
-//
-//		String USER = args[0].toString();
-//		String PASS = args[1].toString();
-//		
-//		Connection conn = null;
-//		Statement stmt = null;
-//		
-//		System.out.println("USER = " + USER);
-//		
-//		try{
-//			// Enregistrer le driver JDBC
-//			// PENSEZ à ajouter la bibliothèque de connexion
-//			// dans le BuildPath de votre projet
-//			Class.forName(JDBC_DRIVER);
-//
-//			// Ouvrir une connexion
-//			System.out.println("Connection à la base de données...");
-//			conn = DriverManager.getConnection(DB_URL, USER,PASS);
-//
-//				// Exécuter une requête
-//				System.out.println("Statement en cours de création...");
-//				stmt = conn.createStatement();			
-//				String sql= "SELECT nom_Classe FROM Classe";
-//				ResultSet rs = stmt.executeQuery(sql);
-//	
-//				while(rs.next()){
-//					// Récupération par nom de champ
-//					String classe  = rs.getString("nom_Classe");
-//					
-//					// Affichage des valeurs
-//					System.out.println("CLASSE: " + classe);
-//				}
-//				
-//				// Nettoyage de l'environnement
-//				rs.close();
-//				stmt.close();
-//				
-//			conn.close();
-//			
-//		} catch(SQLException se) {
-//			// Traiter les erreurs JDBC
-//			se.printStackTrace();
-//		} catch(Exception e) {
-//			// Traiter les erreurs pour Class.forName()
-//			e.printStackTrace();
-//		} finally {
-//			// On ferme les ressources dans le bloc finally
-//			try{
-//				if(stmt!=null)
-//					stmt.close();
-//			} catch(SQLException se2) {
-//				// Il n'y a rien qu'on puisse faire ici
-//			}
-//			try{
-//				if(conn!=null)
-//					conn.close();
-//			} catch(SQLException se) {
-//				se.printStackTrace();
-//			} // Fin du bloc finally
-//		} // Fin du bloc try
-//		System.out.println("Au revoir !");
-//	}
 }
