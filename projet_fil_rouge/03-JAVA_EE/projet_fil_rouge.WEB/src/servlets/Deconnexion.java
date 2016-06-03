@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet("/deconnexion")//mapping  de la servlet déconnexion dans le web.xml
 
 public class Deconnexion extends HttpServlet {
 	

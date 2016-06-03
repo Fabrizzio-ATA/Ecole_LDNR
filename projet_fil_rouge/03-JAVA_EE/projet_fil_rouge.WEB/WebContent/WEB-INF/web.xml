@@ -12,45 +12,34 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-	
 	<jsp-config>
 		<jsp-property-group>
 			<url-pattern>*.jsp</url-pattern>
 			<include-prelude>/WEB-INF/taglib.jsp</include-prelude>
 		</jsp-property-group>
 	</jsp-config>
-
 	<servlet>
-		<description> Projet Fil rouge - Controleur formulaire Adresse </description>
-		<servlet-name>ServletAdresse</servlet-name>
-		<servlet-class>servlets.ServletAdresse</servlet-class>
-		<init-param>
-			<param-name>auteur</param-name>
-			<param-value>Fabrice Galinier</param-value>
-		</init-param>
-		<!-- Ordre de démarrage des servlets -->
-		<load-on-startup>1</load-on-startup>
+		<servlet-name>Connexion</servlet-name>
+		<servlet-class>servlets.Connexion</servlet-class>
 	</servlet>
-
-	<servlet>
-		<description> Projet Fil rouge - Controleur formulaire Civilite</description>
-		<servlet-name>ServletCivilite</servlet-name>
-		<servlet-class>servlets.ServletCivilite</servlet-class>
-		<init-param>
-			<param-name>auteur</param-name>
-			<param-value>Fabrice Galinier</param-value>
-		</init-param>
-		<!-- Ordre de démarrage des servlets -->
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
 	<servlet-mapping>
-		<servlet-name>ServletAdresse</servlet-name>
-		<url-pattern>/URLAdresse</url-pattern>
+		<servlet-name>Connexion</servlet-name>
+		<url-pattern>/connexion</url-pattern>
 	</servlet-mapping>
-
+	<servlet>
+		<servlet-name>CreerCivilite</servlet-name>
+		<servlet-class>servlets.ServletCivilite</servlet-class>
+	</servlet>
 	<servlet-mapping>
-		<servlet-name>ServletCivilite</servlet-name>
-		<url-pattern>/URLCivilite</url-pattern>
+		<servlet-name>CreerCivilite</servlet-name>
+		<url-pattern>/creerCivilite</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>CreerAdresse</servlet-name>
+		<servlet-class>servlets.ServletAdresse</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CreerAdresse</servlet-name>
+		<url-pattern>/creerAdresse</url-pattern>
 	</servlet-mapping>
 </web-app>
