@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import beans.AdresseWEB;;
 
-public class ServletAdresse extends HttpServlet {
+public class Adresse extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final String CHAMP_CP = "codePostal";

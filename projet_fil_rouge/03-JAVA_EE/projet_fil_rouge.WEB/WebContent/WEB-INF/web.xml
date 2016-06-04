@@ -1,56 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	id="WebApp_ID" version="3.0">
-	<display-name>projet_fil_rouge.WEB</display-name>
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
-	</welcome-file-list>
-	
-	<jsp-config>
-		<jsp-property-group>
-			<url-pattern>*.jsp</url-pattern>
-			<include-prelude>/WEB-INF/taglib.jsp</include-prelude>
-		</jsp-property-group>
-	</jsp-config>
-
-	<servlet>
-		<description> Projet Fil rouge - Controleur formulaire Adresse </description>
-		<servlet-name>ServletAdresse</servlet-name>
-		<servlet-class>servlets.ServletAdresse</servlet-class>
-		<init-param>
-			<param-name>auteur</param-name>
-			<param-value>Fabrice Galinier</param-value>
-		</init-param>
-		<!-- Ordre de démarrage des servlets -->
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet>
-		<description> Projet Fil rouge - Controleur formulaire Civilite</description>
-		<servlet-name>ServletCivilite</servlet-name>
-		<servlet-class>servlets.ServletCivilite</servlet-class>
-		<init-param>
-			<param-name>auteur</param-name>
-			<param-value>Fabrice Galinier</param-value>
-		</init-param>
-		<!-- Ordre de démarrage des servlets -->
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>ServletAdresse</servlet-name>
-		<url-pattern>/URLAdresse</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>ServletCivilite</servlet-name>
-		<url-pattern>/URLCivilite</url-pattern>
-	</servlet-mapping>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>projet_fil_rouge.WEB</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <jsp-config>
+    <jsp-property-group>
+      <url-pattern>*.jsp</url-pattern>
+      <include-prelude>/WEB-INF/taglib.jsp</include-prelude>
+    </jsp-property-group>
+  </jsp-config>
+  <servlet>
+    <description> Projet Fil rouge - Controleur formulaire Adresse </description>
+    <servlet-name>ServletAdresse</servlet-name>
+    <servlet-class>servlets.Adresse</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletAdresse</servlet-name>
+    <url-pattern>/URLAdresse</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description> Projet Fil rouge - Controleur formulaire Civilite</description>
+    <servlet-name>ServletCivilite</servlet-name>
+    <servlet-class>servlets.Civilite</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletCivilite</servlet-name>
+    <url-pattern>/URLCivilite</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description> Projet Fil rouge - Controleur formulaire Connexion</description>
+    <servlet-name>ServletConnexion</servlet-name>
+    <servlet-class>servlets.Connexion</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletConnexion</servlet-name>
+    <url-pattern>/URLConnexion</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description> Projet Fil rouge - Controleur formulaire Deconnexion</description>
+    <servlet-name>ServletDeconnexion</servlet-name>
+    <servlet-class>servlets.Deconnexion</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletDeconnexion</servlet-name>
+    <url-pattern>/URLDeconnexion</url-pattern>
+  </servlet-mapping>
 </web-app>

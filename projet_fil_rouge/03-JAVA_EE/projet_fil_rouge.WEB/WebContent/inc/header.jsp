@@ -25,7 +25,7 @@
 	            <li><a href="<c:url value="#"/>">Eleves</a></li>
 	            <li><a href="<c:url value="#"/>">Enseignant</a></li>
 	        </ul>
-	        <button type="button">déconnexion</button>
+	        <a href="URLDeconnexion"> <button type="button">déconnexion</button></a>
 	    </nav>
 	    <main>
         	<div class="centrer">
