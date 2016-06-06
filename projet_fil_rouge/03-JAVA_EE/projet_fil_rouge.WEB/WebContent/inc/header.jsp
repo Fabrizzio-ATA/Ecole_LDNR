@@ -29,3 +29,13 @@
 	    </nav>
 	    <main>
         	<div class="centrer">
+        	
+       		<c:if test="${empty sessionScope.sessionUtilisateur}">
+       			<%-- Si l'utilisateur n'est pas connecté on le redirige vers la page de connexion --%>
+				<c:redirect url="URLConnexion"/>
+			</c:if>
+			<c:if test="${!empty sessionScope.sessionUtilisateur}">
+				<%-- Si l'utilisateur existe en session, alors on affiche son adresse email. --%>
+				<p class="succes">Vous êtes connecté(e) avec l'adresse :
+				${sessionScope.sessionUtilisateur.email}</p>
+			</c:if>
