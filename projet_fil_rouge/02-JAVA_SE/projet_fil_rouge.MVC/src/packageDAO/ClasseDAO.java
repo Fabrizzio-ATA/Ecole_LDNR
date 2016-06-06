@@ -29,14 +29,14 @@ public class ClasseDAO implements InterfaceDb {
 	
 	private Niveau niveau;
 	
-	public ClasseDAO(String nom, String niveau, String periode, Integer enseignant_id) throws InputValueTooLongException{
+	public ClasseDAO(String nom, Niveau niveau, String periode, Integer enseignant_id) throws InputValueTooLongException{
 		setNiveau(niveau);
 		setNom(nom);
 		setPeriode(periode);
 		setEnseignant_id(enseignant_id);
 	}
 	
-	private ClasseDAO(Integer id, String nom, String niveau, String periode, Integer Enseignant_id) throws InputValueTooLongException{
+	private ClasseDAO(Integer id, String nom, Niveau niveau, String periode, Integer Enseignant_id) throws InputValueTooLongException{
 		this(nom, niveau, periode, Enseignant_id);
 		setId(id);
 	}
@@ -102,7 +102,7 @@ public class ClasseDAO implements InterfaceDb {
 			if (rs.first()){
 				retObj = new ClasseDAO(rs.getInt("id"),
 										rs.getString("nom"),
-										rs.getString("niveau"),
+										Niveau.valueOf(rs.getString("niveau")),
 										rs.getString("periode"),
 										rs.getInt("Enseignant_id"));
 			}
@@ -138,7 +138,7 @@ public class ClasseDAO implements InterfaceDb {
 				while(rs.next()){
 					retObj = new ClasseDAO(rs.getInt("id"),
 											rs.getString("nom"),
-											rs.getString("niveau"),
+											Niveau.valueOf(rs.getString("niveau")),
 											rs.getString("periode"),
 											rs.getInt("Enseignant_id"));
 					tabClasse.add(retObj);
@@ -256,13 +256,8 @@ public class ClasseDAO implements InterfaceDb {
 		return this.niveau;
 	}
 
-	public void setNiveau(String niveau) {
-		try {
-			this.niveau = Niveau.fromString(niveau);
-		} catch (InputValueInvalidException e) {
-			// TODO Auto-generated catch block
-			e.getMessage();
-		}
+	public void setNiveau(Niveau niveau) {
+			this.niveau = niveau;
 	}
 
 	public Integer getEnseignant_id() {

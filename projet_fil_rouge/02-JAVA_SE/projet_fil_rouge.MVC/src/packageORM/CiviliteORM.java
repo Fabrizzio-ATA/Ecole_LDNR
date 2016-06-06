@@ -74,26 +74,41 @@ public class CiviliteORM {
 
 	public static CiviliteORM update(int id,String nom, String prenom, String sexe, LocalDate date_naiss) throws SQLException{
 
-
-		CiviliteORM civ;
-		CiviliteDAO civDAO = new CiviliteDAO(nom, prenom, sexe,Date.valueOf(date_naiss));
-		civDAO.setId(id);
-
-		if(civDAO.dbUpdate()){
-
-		civ = new CiviliteORM(civDAO.getId(),
-				civDAO.getNom(),
-				civDAO.getPrenom(),
-				civDAO.getSexe(),
-				civDAO.getDate_naiss().toLocalDate());
-
+		CiviliteORM objORM = null;
+		boolean isExistDAO = false;
+		
+		// Tester si l'objet existe
+		isExistDAO = CiviliteDAO.dbExistFromId(id);
+				
+		// Récupérer l'objet en base
+		if (isExistDAO)
+		{
+			CiviliteDAO objDAO = CiviliteDAO.dbSelectFromId(id);
+			// Mettre à jour les champs
+			objDAO.setNom(nom);
+			objDAO.setPrenom(prenom);
+			objDAO.setSexe(sexe);
+			objDAO.setDate_naiss(date_naiss);
+			
+			// Mettre à jour la base de données
+			if (objDAO.dbUpdate())
+			{
+				objORM = new CiviliteORM(objDAO.getId(),
+						objDAO.getNom(),
+						objDAO.getPrenom(),
+						objDAO.getSexe(),
+						objDAO.getDate_naiss().toLocalDate());
+			}
+			else
+			{
+				throw new  SQLException("Erreur modification de l'Civilite en base de données");
+			}
 		}
-		else{
-			throw new  SQLException("Erreur modification de la civilité en base de données");
+		else
+		{
+			throw new  SQLException("Erreur id inexistant en base de données");
 		}
-
-		return civ;
-
+		return objORM;
 	}
 	
 // METHODE: EFFACER CIVILITE
@@ -136,8 +151,5 @@ public class CiviliteORM {
 	public void setDate_naiss(LocalDate date_naiss) {
 		this.date_naiss = date_naiss;
 	}
-
-
-
 
 }

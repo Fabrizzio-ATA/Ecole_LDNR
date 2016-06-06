@@ -2,6 +2,7 @@ package packageTEST;
 
 import static org.junit.Assert.*;
 import java.util.List;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.junit.AfterClass;
@@ -98,9 +99,16 @@ public class TestAdresseORM {
 		//	
 		// 2. Modification de la ville et du code postal (Gaillac devient Lavaur et 81500 devient 81300
 		
-		if ( AdresseORM.update( objORM.getIdAdresse() , "Chemin rural" , "LAVAUR" , "81300" , "66778899") ) {
-			
-			AdresseORM objetORM2 = AdresseORM.read(indice);
+		AdresseORM objetORM2 = null;
+		try {
+			objetORM2 = AdresseORM.update( objORM.getIdAdresse() , "Chemin rural" , "LAVAUR" , "81300" , "66778899");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if (null != objetORM2)
+		{
 			
 			System.out.println("id " + objetORM2.getIdAdresse() + " Modification OK   " + objetORM2.getVoie() + "  " + 
 					objetORM2.getVille() + "  " + objetORM2.getCp() );

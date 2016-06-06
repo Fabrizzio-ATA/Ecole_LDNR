@@ -1,5 +1,7 @@
 package packageORM;
 
+import java.sql.SQLException;
+
 import packageDAO.AdresseDAO;
 
 public class AdresseORM {
@@ -72,23 +74,44 @@ public class AdresseORM {
 	}
 	
 	//@Override
-	public static boolean update(Integer idAdresseORM , String voie, String ville, String cp, String telephone) {
+	public static AdresseORM update(Integer id , String voie, String ville, String cp, String telephone) throws SQLException {
+	
+		AdresseORM objORM = null;
+		boolean isExistDAO = false;
 		
-		boolean retour = false;
-		
-		AdresseORM objORM = new AdresseORM(idAdresseORM , voie, ville, cp, telephone);
-		
-		// Créer la classe DAO de l'objet courant avec les valeurs
-		AdresseDAO adresseDAO = new AdresseDAO(	objORM.getVoie() 	   , objORM.getVille() 	 , 
-												objORM.getCp() 		   , objORM.getTelephone() );
-		adresseDAO.setId( objORM.getIdAdresse() ); 
-		
-		
-		if (adresseDAO.dbUpdate() ) {
-			retour =  true;
+		// Tester si l'objet existe
+		isExistDAO = AdresseDAO.dbExistFromId(id);
+				
+		// Récupérer l'objet en base
+		if (isExistDAO)
+		{
+			AdresseDAO objDAO = AdresseDAO.dbSelectFromId(id);
+			// Mettre à jour les champs
+			objDAO.setVoie(voie);
+			objDAO.setVille(ville);
+			objDAO.setCp(cp);
+			objDAO.setTelephone(telephone);
+			
+			// Mettre à jour la base de données
+			if (objDAO.dbUpdate())
+			{
+				objORM = new AdresseORM(objDAO.getId(),
+							objDAO.getVoie(),
+							objDAO.getVille(),
+							objDAO.getCp(),
+							objDAO.getTelephone());
+			}
+			else
+			{
+				throw new  SQLException("Erreur modification de l'Adresse en base de données");
+			}
+
 		}
-		
-		return retour;
+		else
+		{
+			throw new  SQLException("Erreur id inexistant en base de données");
+		}
+		return objORM;
 	}
 
 	

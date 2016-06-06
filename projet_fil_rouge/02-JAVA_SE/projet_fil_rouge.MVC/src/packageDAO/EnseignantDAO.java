@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import packageJDBC.JDBCConnection;
 
 public class EnseignantDAO implements InterfaceDb {
-	private static String table = "Enseignant";
+	private static final String table = "Enseignant";
 	
 	/**
 	 * Description of the property id.
@@ -73,7 +73,7 @@ public class EnseignantDAO implements InterfaceDb {
 	/**
 	 * Description of the method dbSelectFromId.
 	 * @param id 
-	 * @return EleveDAO
+	 * @return EnseignantDAO
 	 */
 	public static EnseignantDAO dbSelectFromId(int id) {
 		EnseignantDAO retObj = null;

@@ -14,6 +14,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import packageDAO.ClasseDAO;
+import packageDAO.Niveau;
 import packageException.InputValueTooLongException;
 
 public class TestClasseDAO {
@@ -30,7 +31,7 @@ public class TestClasseDAO {
 	private static ClasseDAO newValidObj() throws InputValueTooLongException{
 		ClasseDAO obj = null;
 		try {
-			obj = new ClasseDAO("Rob", "CM1", "2016", 3);
+			obj = new ClasseDAO("Rob", Niveau.CE1, "2016", 3);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			fail("Objet conforme non construit");
@@ -119,7 +120,7 @@ public class TestClasseDAO {
 		
 		ClasseDAO obj2 = dbInsertNewValidObj();
 		
-		obj2.setNiveau("CM2");
+		obj2.setNiveau(Niveau.CM2);
 		//Test d'update sur un enregistrement inexistant
 		//Doit renvoyé true
 		assertTrue("Test d'update sur un enregistrement existant", obj2.dbUpdate());

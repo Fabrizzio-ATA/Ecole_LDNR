@@ -1,10 +1,10 @@
 package packageORM;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import packageDAO.ClasseDAO;
-import packageDAO.EleveDAO;
 import packageDAO.Eleve_has_ClasseDAO;
-import packageDAO.EnseignantDAO;
+import packageDAO.Niveau;
 import packageException.InputValueTooLongException;
 
 public class ClasseORM {
@@ -17,9 +17,9 @@ public class ClasseORM {
 		
 	private String nom;
 	
-	private String periode;
+	private Niveau niveau;
 	
-	private String niveau;
+	private String periode;
 	
 	private EnseignantORM enseignant;
 	
@@ -29,19 +29,19 @@ public class ClasseORM {
 	 *  Constructeurs
 	 */
 	
-	private ClasseORM(String nom, String periode, String niveau, EnseignantORM enseignant,
+	private ClasseORM(String nom, Niveau niveau, String periode, EnseignantORM enseignant,
 			ArrayList<EleveORM> tabEleves) {
 		super();
 		this.setNom(nom);
-		this.setPeriode(periode);
 		this.setNiveau(niveau);
+		this.setPeriode(periode);
 		this.setEnseignant(enseignant);
 		this.setTabEleves(tabEleves);
 	}
 	
-	private ClasseORM(Integer id, String nom, String periode, String niveau, EnseignantORM enseignant,
+	private ClasseORM(Integer id, String nom, Niveau niveau, String periode, EnseignantORM enseignant,
 			ArrayList<EleveORM> tabEleves) {
-		this (nom,periode,niveau,enseignant,tabEleves);
+		this (nom,niveau,periode,enseignant,tabEleves);
 		this.setId(id);
 	}
 	
@@ -52,50 +52,54 @@ public class ClasseORM {
 	 */
 
 	/**
+	 * 	METHODE: CREER CIVILITE
+	 * 
 	 * 	 Les objets enseignant et eleves doivent déjà exister.
 	 * 	 Il faut vérifier que la valeur transmise correspond à la donnée en base
 	 * 	// obj.getEnseignant().hasSameContent(EnseignantDAO.dbSelectFromId(obj.getEnseignant().getId()));
 	 * 	NOTE : Pas besoin de s'occuper des élèves à la création
+	 * @throws InputValueTooLongException 
+	 * @throws SQLException 
 	 */
 
-	public static boolean create(String nom, String periode, String niveau, EnseignantORM enseignant, ArrayList<EleveORM> tabEleves) {
-		
-		
-		boolean ret = false;
-		
-		ClasseORM obj = new ClasseORM(nom, periode, niveau, enseignant, null);
-	
-		// Créer la classe DAO de l'objet courant en récupérant les id des objets précédents
-		ClasseDAO objDAO;
-		try {
-			objDAO = new ClasseDAO(obj.getNom(),obj.getNiveau(),obj.getPeriode(),obj.getEnseignant().getId());
-			//TODO EnseignantORM.getID()
+	public static ClasseORM create(String nom, Niveau niveau, String periode, EnseignantORM enseignant, ArrayList<EleveORM> tabEleves) throws InputValueTooLongException, SQLException {
 			
-			// Insérer la classe dans la base de données
-			ret = objDAO.dbInsert();
-		} catch (InputValueTooLongException e) {
-			// TODO Auto-generated catch block
-			e.getMessage();
+		ClasseORM objORM = null;
+		
+		// Créer la classe DAO de l'objet courant en récupérant les id des objets en attribut
+		ClasseDAO objDAO = new ClasseDAO(nom,niveau,periode,enseignant.getId());
+			
+		// Insérer la classe dans la base de données
+		if (objDAO.dbInsert())
+		{
+			objORM = new ClasseORM(nom, niveau, periode, enseignant, tabEleves);
+		}
+		else {
+			throw new  SQLException("Erreur d'enregistrement sur la civilité en base de données");
 		}
 		
-		return ret;
+		return objORM;
 	}
 
-	//@Override
-	public static ClasseORM read(Integer id) {
+	// METHODE : LIRE UNE CLASSE
+	public static ClasseORM read(Integer id) throws SQLException {
 		// Récupérer l'objet DAO correspondant:
 		ClasseDAO objDAO = ClasseDAO.dbSelectFromId(id);
+		
+		// FIXME : Le tableau d'élève ne doit être rempli que lorsque la classe existe et la méthode
+		// getElevesFromClasse permet de les extraire de la base de données.
+		
 		// Récupérer le tableau d'élèves
 		ArrayList<EleveORM> tabEleves = ClasseORM.getElevesFromClasse(id);
 		
-		EnseignantORM enseignant = null;
-		// TODO enseignant = new EnseignantORM.read(objDAO.getEnseignant_id());
+		// Récupérer l'enseignant
+		EnseignantORM enseignant = EnseignantORM.read(objDAO.getEnseignant_id());
 		
 		// Creer un obj ClasseORM avec les valeurs trouvées en base
 		ClasseORM obj = new ClasseORM(objDAO.getId(),
 								objDAO.getNom(),
+								objDAO.getNiveau(),
 								objDAO.getPeriode(),
-								objDAO.getNiveau().toString(),
 								enseignant,
 								tabEleves
 								);
@@ -103,32 +107,69 @@ public class ClasseORM {
 		return obj;
 	}
 
-	private static ArrayList<EleveORM> getElevesFromClasse(Integer id2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	//@Override
-	public ArrayList<ClasseORM> read() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static boolean update(String nom, String periode, String niveau, EnseignantORM enseignant) {
+	// LIRE UNE LISTE DE CLASSES
+	public static ArrayList<ClasseORM> read() throws SQLException {
+		ArrayList <ClasseORM> tabClasses = new ArrayList<ClasseORM>(); 
 		
-		boolean ret = false;
-		
-		ClasseORM obj = new ClasseORM(nom, periode, niveau, enseignant, null);
-	
-		// Créer la classe DAO de l'objet courant en récupérant les id des objets précédents
-		try {
-			ClasseDAO objDAO = new ClasseDAO(obj.getNom(),obj.getNiveau(),obj.getPeriode(),obj.getEnseignant().getId());
-		} catch (InputValueTooLongException e) {
-			// TODO Auto-generated catch block
-			e.getMessage();
+		for (ClasseDAO objDAO : ClasseDAO.dbSelectAll())
+		{
+			tabClasses.add(ClasseORM.read(objDAO.getId()));
 		}
+		return tabClasses;
+	}
+	
+	private static ArrayList<EleveORM> getElevesFromClasse(Integer idClasse) {
+		ArrayList <EleveORM> tabEleves = new ArrayList<EleveORM>();
 		
-		return ret;
+		for (Eleve_has_ClasseDAO objDAO : Eleve_has_ClasseDAO.dbSelectAll()	 )
+		{
+			if ( objDAO.getId_Classe() == idClasse)
+			{
+				//TODO	tabEleves.add(EleveORM.getEleveFromId(objDAO.getId_Eleve()));
+			}
+		}
+			
+		return tabEleves;
+	}
+
+	public static ClasseORM update(Integer id, String nom, Niveau niveau, String periode, EnseignantORM enseignant) throws InputValueTooLongException, SQLException {
+		
+		ClasseORM objORM = null;
+		boolean isExistDAO = false;
+		
+		// Tester si l'objet existe
+		isExistDAO = ClasseDAO.dbExistFromId(id);
+		
+		// Récupérer l'objet en base
+		if (isExistDAO)
+		{
+			ClasseDAO objDAO = ClasseDAO.dbSelectFromId(id);
+			objDAO.setNom(nom);
+			objDAO.setNiveau(niveau);
+			objDAO.setPeriode(periode);
+			objDAO.setEnseignant_id(enseignant.getId());
+			
+			if (objDAO.dbUpdate())
+			{
+				objORM = new ClasseORM(
+							objDAO.getId(),
+							objDAO.getNom(),
+							objDAO.getNiveau(),
+							objDAO.getPeriode(),
+							enseignant,
+							null);
+			}
+			else
+			{
+				throw new  SQLException("Erreur modification de la classe en base de données");
+			}
+		}
+		else
+		{
+			throw new  SQLException("Erreur id inexistant en base de données");
+		}
+		return objORM;
+		
 	}
 
 	//@Override
@@ -170,11 +211,11 @@ public class ClasseORM {
 		this.periode = periode;
 	}
 
-	public String getNiveau() {
+	public Niveau getNiveau() {
 		return niveau;
 	}
 
-	public void setNiveau(String niveau2) {
+	public void setNiveau(Niveau niveau2) {
 		this.niveau = niveau2;
 	}
 
