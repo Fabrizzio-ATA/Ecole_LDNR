@@ -41,9 +41,7 @@ public class CiviliteWEB implements Serializable {
 		return dateNaissance;
 	}
 
-	public void setDateNaissance(String date) {
-		// Date de type AAAA-MM-JJ
-		if (!date.isEmpty())
-			this.dateNaissance = LocalDate.parse(date);
+	public void setDateNaissance(LocalDate date) {
+		this.dateNaissance = date;
 	}
 }

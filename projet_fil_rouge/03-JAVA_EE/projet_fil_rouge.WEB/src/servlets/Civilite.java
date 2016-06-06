@@ -47,7 +47,7 @@ public class Civilite extends HttpServlet {
                     + "Pour accéder de nouveau au formulaire de création d'un client : "
                     + "<a href=\"NewCivilite.jsp\">cliquez ici</a>.";
         } else {
-    		civilite.setDateNaissance(dateNaissance);
+    		civilite.setDateNaissance(LocalDate.parse(dateNaissance));
         	
             msg = "Civilité correctement créée.";
             isError = false;
