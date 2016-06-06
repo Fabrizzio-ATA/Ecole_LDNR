@@ -1,7 +1,16 @@
-var Hmain = $(window).height()-(
-				$('header').outerHeight()
-				+$('nav').outerHeight()
-				+$('footer').outerHeight()
-			);
+$(window).resize(function() {
+	placementFooter();
+});
+$(window).load(function() {
+	placementFooter();
+});
 
-$('main').css('height', (Hmain-45));
+function placementFooter() {
+	var Hmain = $(window).height()-(
+			$('header').outerHeight()
+			+$('nav').outerHeight()
+			+$('footer').outerHeight()
+		);
+
+	$('main').css('height', (Hmain-45));
+}

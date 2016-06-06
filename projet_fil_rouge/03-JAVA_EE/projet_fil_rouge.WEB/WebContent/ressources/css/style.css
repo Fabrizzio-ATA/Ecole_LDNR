@@ -92,7 +92,7 @@ nav ul>li>a:hover {
   text-decoration: none;
 }
 
-nav button {
+nav>a{
    top: 10px;
     right: 15px;
     position: absolute;
@@ -100,7 +100,7 @@ nav button {
     display: block;
     width: 175px;
     line-height: 30px;
-    font-size: 16px;
+    font-size: 1.4em;
     color: #fff;
     font-weight: 700;
     text-align: center;
@@ -108,14 +108,114 @@ nav button {
     border-radius: 5px;
     transition: background .3s;
     border: none;
+    text-decoration: none;
+    font-variant: small-caps;
 }
 
-nav button:hover{
-    background: #0F9295;
+nav>a:hover{
+    background: #19adb0;
 }
 
 main {
     padding: 15px;
+}
+
+/* Formulaire Connexion ------------------------------------------------------------------------ */
+
+input {
+  border: 0;
+  color: inherit;
+  font: inherit;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+  -webkit-transition: background-color .3s;
+  transition: background-color .3s;
+}
+
+.conn_container {
+  margin: 0 auto;
+  max-width: 20rem;
+  width: 90%;
+  height: 100%;
+  text-align: center;
+}
+
+.conn_container h1,  .conn_container p{
+  color : #444759;
+  font-weight: bold;
+}
+
+.conn_container h1 {
+	margin-top: 35%;
+}
+
+.form {
+	margin-top: 15px;
+}
+
+.form input[type="password"], .form input[type="text"], .form input[type="submit"] {
+  width: 100%;
+}
+.form--login {
+  color: #d3d7cf;
+}
+.form--login label,
+.form--login input[type="text"],
+.form--login input[type="password"],
+.form--login input[type="submit"] {
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+.form--login label {
+  background-color: #444759;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+.form--login input[type="text"], .form--login input[type="password"] {
+  background-color: #666978;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+.form--login input[type="text"]:focus, .form--login input[type="text"]:hover, .form--login input[type="password"]:focus, .form--login input[type="password"]:hover {
+  background-color: #666978 !important;
+}
+.form--login input[type="submit"] {
+  background-color: #1ACACE;
+  transition: background-color .3s;
+  color: #eee;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.form--login input[type="submit"]:focus, .form--login input[type="submit"]:hover {
+  background-color: #19adb0;
+}
+.form__field {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  margin-bottom: 1rem;
+}
+.form__input {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
 /* Styles et couleurs -------------------------------------------------------------------------- */
@@ -131,7 +231,10 @@ main {
 }
 
 .erreur {
-	color: #900;
+	color: #ee0404 !important;
+    width: 100%;
+    font-weight: bold;
+    padding-bottom: 10px;
 }
 
 .succes {
