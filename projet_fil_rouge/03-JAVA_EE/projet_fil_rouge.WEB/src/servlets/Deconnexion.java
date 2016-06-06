@@ -13,15 +13,21 @@ import javax.servlet.http.HttpSession;
  */
 //@WebServlet("/URLDeconnexion")
 public class Deconnexion extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-	public static final String URL_REDIRECTION = "/URLConnexion";
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4096757649950448031L;
+	
+	
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		/* Récupération et destruction de la session en cours */
 		HttpSession session = request.getSession();
 		session.invalidate();
+		
 		/* Redirection vers le formulaire de connexion */
-		response.sendRedirect(getServletContext().getContextPath() + URL_REDIRECTION);
+		response.sendRedirect( getServletContext().getContextPath());
 	}
 }
