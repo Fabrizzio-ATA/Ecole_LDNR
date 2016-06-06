@@ -75,11 +75,6 @@
 			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageDAO/ClasseDAO.java</locationURI>
 		</link>
 		<link>
-			<name>src/packageDAO/DAO.java</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageDAO/DAO.java</locationURI>
-		</link>
-		<link>
 			<name>src/packageDAO/EleveDAO.java</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageDAO/EleveDAO.java</locationURI>
@@ -103,11 +98,6 @@
 			<name>src/packageDAO/InterfaceDb.java</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageDAO/InterfaceDb.java</locationURI>
-		</link>
-		<link>
-			<name>src/packageDAO/MaTableDAO.java</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageDAO/MaTableDAO.java</locationURI>
 		</link>
 		<link>
 			<name>src/packageDAO/Niveau.java</name>
@@ -145,19 +135,29 @@
 			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageJDBC/Main.java</locationURI>
 		</link>
 		<link>
+			<name>src/packageORM/.gitignore</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageORM/.gitignore</locationURI>
+		</link>
+		<link>
+			<name>src/packageORM/AdresseORM.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageORM/AdresseORM.java</locationURI>
+		</link>
+		<link>
 			<name>src/packageORM/ClasseORM.java</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageORM/ClasseORM.java</locationURI>
 		</link>
 		<link>
-			<name>src/packageORM/InterfaceORM.java</name>
+			<name>src/packageORM/EleveORM.java</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageORM/InterfaceORM.java</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageORM/EleveORM.java</locationURI>
 		</link>
 		<link>
-			<name>src/packageORM/MaTable.java</name>
+			<name>src/packageORM/EnseignantORM.java</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageORM/MaTable.java</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageORM/EnseignantORM.java</locationURI>
 		</link>
 		<link>
 			<name>src/packageTEST/TestAdresseDAO.java</name>
@@ -200,9 +200,9 @@
 			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageTEST/TestJDBCConnection.java</locationURI>
 		</link>
 		<link>
-			<name>src/packageTEST/TestMaTableDAO.java</name>
+			<name>WebContent/WEB-INF/classes/packageORM/.gitignore</name>
 			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageTEST/TestMaTableDAO.java</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/02-JAVA_SE/projet_fil_rouge.MVC/src/packageORM/.gitignore</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
