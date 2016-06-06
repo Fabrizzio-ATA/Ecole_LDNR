@@ -1,6 +1,6 @@
 package packageORM;
 
-public class EnseignantORM extends ORM {
+public class EnseignantORM {
 
 	public Integer getId() {
 		// TODO Auto-generated method stub
