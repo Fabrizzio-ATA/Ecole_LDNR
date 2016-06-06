@@ -20,12 +20,16 @@ public class AdresseORM {
 		super();
 	}
 	
-	public AdresseORM(String voie,  String ville, String cp , String telephone) {
-		
+	private AdresseORM(String voie,  String ville, String cp , String telephone) {
 		setVoie(voie);
-		setCP(cp);
+		setCp(cp);
 		setVille(ville);
 		setTelephone(telephone);
+	}
+	
+	private AdresseORM(Integer idAdresse, String voie,  String ville, String cp , String telephone) {
+		this(voie, ville, cp, telephone);
+		setIdAdresse(idAdresse);
 	}
 	
 	/*
@@ -33,68 +37,82 @@ public class AdresseORM {
 	 */
 
 	//@Override
-	public AdresseORM create(String voie, String ville, String cp, String telephone) {
+	public static AdresseORM create(String voie, String ville, String cp, String telephone) {
 				
-		// Instanciation de l'adresseORM avec les zones d'adresse
-		AdresseORM 		adresseORM = new AdresseORM(voie, ville , cp , telephone );
+		// Instanciation de l'adresseORM initialisé à null
+		AdresseORM 		adresseORM = null; 
 		
 		// Création de l'objet DAO et enregistrement avec la méthode DAO
-		AdresseDAO adresseDAO;
-			
-		
 		// instancier l'objet adresseDAO pour l'enregistrer
-		adresseDAO = new AdresseDAO(adresseORM.getVoie()  , adresseORM.getCP() , 
-									adresseORM.getVille() , adresseORM.getTelephone() );
+		 AdresseDAO adresseDAO = new AdresseDAO( voie       , ville         , 
+									             cp         , telephone );
+		 
 		
 		// Insérer la classe dans la base de données
-		adresseDAO.dbInsert(); 
+		if (adresseDAO.dbInsert()) {
+
+			adresseORM = new AdresseORM( adresseDAO.getId()      , adresseDAO.getVoie()  , 
+										 adresseDAO.getVille()   , adresseDAO.getCp()    ,
+										 adresseDAO.getTelephone());
+		}
 		
 		return adresseORM;
 	}
 	
 	//@Override
-	public boolean delete(Integer idAdresse) {
+	public static boolean delete(Integer idAdresse) {
 		boolean retour = false;
 		
-		AdresseDAO.dbDeleteFromId(idAdresse);
+		
+		if (AdresseDAO.dbDeleteFromId(idAdresse)) {
+			retour = true;
+		}
 		
 		return retour;
 	}
 	
 	//@Override
-	public AdresseORM update(String voie, String ville, String cp, String telephone) {
+	public static boolean update(Integer idAdresseORM , String voie, String ville, String cp, String telephone) {
 		
-		AdresseORM adresseORM = new AdresseORM(voie, ville, cp, telephone);
-	
-		// Créer la classe DAO de l'objet courant en récupérant les id des objets précédents
-		AdresseDAO adresseDAO = new AdresseDAO(	adresseORM.getVoie() , adresseORM.getVille () ,
-												adresseORM.getCP()   , adresseORM.getTelephone() );
+		boolean retour = false;
 		
-		adresseDAO.dbUpdate();
+		AdresseORM objORM = new AdresseORM(idAdresseORM , voie, ville, cp, telephone);
 		
-		return adresseORM;
+		// Créer la classe DAO de l'objet courant avec les valeurs
+		AdresseDAO adresseDAO = new AdresseDAO(	objORM.getVoie() 	   , objORM.getVille() 	 , 
+												objORM.getCp() 		   , objORM.getTelephone() );
+		adresseDAO.setId( objORM.getIdAdresse() ); 
+		
+		
+		if (adresseDAO.dbUpdate() ) {
+			retour =  true;
+		}
+		
+		return retour;
 	}
 
 	
 	//@Override
-	public AdresseORM read(Integer idAdresseORM) {
+	public static AdresseORM read(Integer idAdresseORM) {
 		
 		// Récupérer l'objet DAO correspondant:
 		AdresseDAO adresseDAO = AdresseDAO.dbSelectFromId(idAdresseORM);
+		
 		// Récupérer le tableau d'élèves
 		
-		AdresseORM adresseORM = new AdresseORM( adresseDAO.getVoie()  , adresseDAO.getVille()  ,
-												adresseDAO.getVille() , adresseDAO.getTelephone() );
+		AdresseORM adresseORM = new AdresseORM( adresseDAO.getId()     , adresseDAO.getVoie()  , 
+												adresseDAO.getVille()  , adresseDAO.getCp() , 
+												adresseDAO.getTelephone() );
 		
 		return adresseORM;
 	}
 	
 	
-	public String getCP() {
+	public String getCp() {
 		return cp;
 	}
 
-	public void setCP(String codePostal) {
+	public void setCp(String codePostal) {
 		this.cp = codePostal;
 	}
 
