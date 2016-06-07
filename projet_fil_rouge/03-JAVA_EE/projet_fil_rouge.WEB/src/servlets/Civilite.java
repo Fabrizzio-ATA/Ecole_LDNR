@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.CiviliteWEB;
+import beans.CiviliteBEAN;
 
 
 public class Civilite extends HttpServlet {
@@ -33,7 +33,7 @@ public class Civilite extends HttpServlet {
 		boolean isError = true;
 
 		// Création et initialisation du Bean
-		CiviliteWEB civilite = new CiviliteWEB();
+		CiviliteBEAN civilite = new CiviliteBEAN();
 		
 		// Vérification données
         if ( nom.isEmpty() || prenom.isEmpty() || sexe.isEmpty() || dateNaissance.isEmpty() ) {

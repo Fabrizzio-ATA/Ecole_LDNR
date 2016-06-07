@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import beans.AdresseWEB;;
+import beans.AdresseBEAN;;
 
 public class Adresse extends HttpServlet {
 
@@ -30,7 +30,7 @@ public class Adresse extends HttpServlet {
         boolean isError = true;
         
 		// Création et initialisation du Bean
-		AdresseWEB adresse = new AdresseWEB();
+		AdresseBEAN adresse = new AdresseBEAN();
 
 		// TODO Faire un try not null des champs de civilite sinon forward
 		if (cp.isEmpty() || voie.isEmpty() || ville.isEmpty())

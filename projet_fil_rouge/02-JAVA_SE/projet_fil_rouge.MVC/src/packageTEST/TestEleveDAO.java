@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import packageDAO.EleveDAO;
+import packageDAO.StatutEleve;
 
 public class TestEleveDAO {
 	
@@ -24,7 +25,7 @@ public class TestEleveDAO {
 	private static EleveDAO newValidObj(){
 		EleveDAO obj = null;
 		try{
-			obj = new EleveDAO(3, "normal");
+			obj = new EleveDAO(3, StatutEleve.NORMAL);
 		} catch(Exception e) {
 			fail("Objet conforme non construit");
 		}
@@ -90,7 +91,7 @@ public class TestEleveDAO {
 		assertFalse("Test d'update sur un enregistrement inexistant", obj.dbUpdate());
 		
 		EleveDAO obj2 = dbInsertNewValidObj();
-		obj2.setStatutEleve("va_partir");
+		obj2.setStatutEleve(StatutEleve.VA_PARTIR);
 		//Test d'update sur un enregistrement inexistant
 		//Doit renvoyé true
 		assertTrue("Test d'update sur un enregistrement existant", obj2.dbUpdate());

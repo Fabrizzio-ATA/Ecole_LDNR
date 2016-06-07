@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import packageException.InputValueInvalidException;
 import packageJDBC.JDBCConnection;
 
 public class EleveDAO implements InterfaceDb {
@@ -23,12 +22,12 @@ public class EleveDAO implements InterfaceDb {
 	
 	private StatutEleve statutEleve;
 
-	public EleveDAO(int Civilite_id, String statutEleve) {
+	public EleveDAO(int Civilite_id, StatutEleve statut) {
 		setCivilite_id(Civilite_id);
-		setStatutEleve(statutEleve);
+		setStatutEleve(statut);
 	}
 	
-	private EleveDAO(Integer id, int Civilite_id, String statutEleve){
+	private EleveDAO(Integer id, int Civilite_id, StatutEleve statutEleve){
 		this(Civilite_id, statutEleve);
 		setId(id);
 	}
@@ -51,7 +50,9 @@ public class EleveDAO implements InterfaceDb {
 		try {
 			pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, this.getCivilite_id());
-			pstmt.setString(2, this.getStatutEleve().getStatut());
+			
+			// FIXME Fab 7/6/2016 : Modification de l'enregistrement du StatutEleve
+			pstmt.setString(2, this.getStatutEleve().toString());
 			
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys();
@@ -93,7 +94,7 @@ public class EleveDAO implements InterfaceDb {
 			if (rs.first()){
 				retObj = new EleveDAO(rs.getInt("id"),
 										rs.getInt("Civilite_id"),
-										rs.getString("StatutEleve"));
+										StatutEleve.valueOf(rs.getString("StatutEleve")));
 			}
 			rs.close();
 			stmt.close();
@@ -127,7 +128,7 @@ public class EleveDAO implements InterfaceDb {
 				while(rs.next()){
 					retObj = new EleveDAO(rs.getInt("id"),
 											rs.getInt("Civilite_id"),
-											rs.getString("StatutEleve"));
+											StatutEleve.valueOf(rs.getString("StatutEleve")));
 					tabEleve.add(retObj);
 				}
 			}
@@ -184,7 +185,8 @@ public class EleveDAO implements InterfaceDb {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, this.getCivilite_id());
-			pstmt.setString(2, this.getStatutEleve().getStatut());
+			// FIXME Fab 7/6/2016 : Modification de l'enregistrement du StatutEleve
+			pstmt.setString(2, this.getStatutEleve().toString());
 			updateRowCount = pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -253,13 +255,7 @@ public class EleveDAO implements InterfaceDb {
 		return statutEleve;
 	}
 
-	public void setStatutEleve(String statut) {
-		try {
-			this.statutEleve = StatutEleve.fromString(statut);
-		} catch (InputValueInvalidException e) {
-			// TODO Auto-generated catch block
-			e.getMessage();
-		}
+	public void setStatutEleve(StatutEleve statut) {
+			this.statutEleve = statut;
 	}
-
 }

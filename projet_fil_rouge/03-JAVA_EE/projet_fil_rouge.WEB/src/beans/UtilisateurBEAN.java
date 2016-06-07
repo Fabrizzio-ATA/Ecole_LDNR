@@ -1,10 +1,12 @@
 package beans;
 
-public class Utilisateur {
+import packageDAO.StatutEleve;
 
-    private String email;
-    private String motDePasse;
-    private String nom;
+public class UtilisateurBEAN {
+
+    private String email;//64
+    private String motDePasse;//16
+    private StatutEleve status;
 
     public void setEmail(String email) {
 	this.email = email;
@@ -20,10 +22,10 @@ public class Utilisateur {
 	return motDePasse;
     }
 
-    public void setNom(String nom) {
-	this.nom = nom;
+    public void setNom(StatutEleve status) {
+	this.status = status;
     }
-    public String getNom() {
-	return nom;
+    public StatutEleve getNom() {
+	return status;
     }
 }

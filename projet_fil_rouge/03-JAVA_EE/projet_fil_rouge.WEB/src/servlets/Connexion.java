@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import beans.Utilisateur;
+import beans.UtilisateurBEAN;
 import forms.ConnexionForm;
 
 public class Connexion extends HttpServlet {
@@ -42,13 +42,13 @@ public class Connexion extends HttpServlet {
 		ConnexionForm form = new ConnexionForm();
 		
 		//Traitement de la requête et récupération du bean en résultant
-		Utilisateur utilisateur = form.connecterUtilisateur(request);
+		UtilisateurBEAN utilisateurBEAN = form.connecterUtilisateur(request);
 		
 		
 		
 		// Si validation ok alors ajout du bean utilisateur à la session sinon suppression
 		if (form.getErreurs().isEmpty()){
-			session.setAttribute(ATT_SESSION_USER, utilisateur);
+			session.setAttribute(ATT_SESSION_USER, utilisateurBEAN);
 			response.sendRedirect( pageReferent );
 		}
 		else {

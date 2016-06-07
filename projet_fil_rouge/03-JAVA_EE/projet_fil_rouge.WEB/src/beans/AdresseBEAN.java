@@ -2,13 +2,14 @@ package beans;
 
 import java.io.Serializable;
 
-public class AdresseWEB implements Serializable {
+public class AdresseBEAN implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private String voie;
 	private String codePostal;
 	private String ville;
+	private String numeroTelephone;
 	
 	public String getVoie() {
 		return voie;
@@ -27,5 +28,11 @@ public class AdresseWEB implements Serializable {
 	}
 	public void setVille(String ville) {
 		this.ville = ville;
+	}
+	public String getNumeroTelephone() {
+		return numeroTelephone;
+	}
+	public void setNumeroTelephone(String numeroTelephone) {
+		this.numeroTelephone = numeroTelephone;
 	}
 }

@@ -14,4 +14,26 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/beans</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>src/beans/AdresseBEAN.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/03-JAVA_EE/projet_fil_rouge.WEB/src/beans/AdresseBEAN.java</locationURI>
+		</link>
+		<link>
+			<name>src/beans/CiviliteBEAN.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/03-JAVA_EE/projet_fil_rouge.WEB/src/beans/CiviliteBEAN.java</locationURI>
+		</link>
+		<link>
+			<name>src/beans/UtilisateurBEAN.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/03-JAVA_EE/projet_fil_rouge.WEB/src/beans/UtilisateurBEAN.java</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

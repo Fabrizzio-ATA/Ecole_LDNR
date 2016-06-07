@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import beans.Utilisateur;
+import beans.UtilisateurBEAN;
 
 public final class ConnexionForm {
 	private static final String CHAMP_EMAIL = "email";
@@ -18,12 +18,12 @@ public final class ConnexionForm {
 	public Map<String, String> getErreurs() {
 		return erreurs;
 	}
-	public Utilisateur connecterUtilisateur( HttpServletRequest request ) {
+	public UtilisateurBEAN connecterUtilisateur( HttpServletRequest request ) {
 	
 		/* Récupération des champs du formulaire */
 		String email = getValeurChamp( request, CHAMP_EMAIL );
 		String motDePasse = getValeurChamp( request, CHAMP_PASS );
-		Utilisateur utilisateur = new Utilisateur();
+		UtilisateurBEAN utilisateurBEAN = new UtilisateurBEAN();
 		
 		/* Validation du champ email. */
 		try {
@@ -31,7 +31,7 @@ public final class ConnexionForm {
 		} catch ( Exception e ) {
 			setErreur( CHAMP_EMAIL, e.getMessage() );
 		}
-		utilisateur.setEmail( email );
+		utilisateurBEAN.setEmail( email );
 		
 		/* Validation du champ mot de passe. */
 		try {
@@ -39,7 +39,7 @@ public final class ConnexionForm {
 		} catch ( Exception e ) {
 			setErreur( CHAMP_PASS, e.getMessage() );
 		}
-		utilisateur.setMotDePasse( motDePasse );
+		utilisateurBEAN.setMotDePasse( motDePasse );
 		
 		/* Initialisation du résultat global de la validation. */
 		if ( erreurs.isEmpty() ) {
@@ -47,7 +47,7 @@ public final class ConnexionForm {
 		} else {
 			resultat = "Échec de la connexion.";
 		}
-		return utilisateur;
+		return utilisateurBEAN;
 	}
 	/**
 	 * Valide l'adresse email saisie.

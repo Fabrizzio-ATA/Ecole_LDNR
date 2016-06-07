@@ -75,7 +75,7 @@ public class UtilisateurORM {
 									objDAO.getRole());
 		}
 		else {
-			throw new SQLException ("Utilisateur introuvable");
+			throw new SQLException ("UtilisateurBEAN introuvable");
 		}
 		
 		return objORM;

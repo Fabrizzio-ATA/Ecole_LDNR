@@ -3,7 +3,7 @@ package beans;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class CiviliteWEB implements Serializable {
+public class CiviliteBEAN implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
