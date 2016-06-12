@@ -7,7 +7,6 @@ import beans.AdresseBEAN;
 import beans.CiviliteBEAN;
 import packageDAO.CiviliteDAO;
 import packageDAO.EleveDAO;
-import packageDAO.Eleve_has_AdresseDAO;
 import packageDAO.StatutEleve;
 
 public class EleveORM {
@@ -102,12 +101,13 @@ public class EleveORM {
 				civilite.getSexe(), 
 				civilite.getDateNaissance());		
 				
-		// Créer la classe DAO de l'objet courant en récupérant les id des objets en attribut
+		// Créer l'objet DAO de l'objet courant en récupérant les id des objets en attribut
 		EleveDAO objDAO = new EleveDAO(civiliteORM.getId(),statut);
 		
-		// Insérer la classe dans la base de données
+		// Insérer l'objet dans la base de données
 		if (objDAO.dbInsert())
 		{
+			// Initialiser l'objet ORM à retourner
 			eleveORM = new EleveORM(objDAO.getId(),
 									statut,
 									civiliteORM);
@@ -120,22 +120,32 @@ public class EleveORM {
 		ArrayList <AdresseORM> tabAdresseORM = new ArrayList<AdresseORM>();
 		AdresseORM adresseORM = null;
 
+		/* FIXME Ajouter d'abord les méthodes de lecture et de supression par id d'Eleve dans Eleve_has_classe
 		for (AdresseBEAN adresse : tabAdresses)
 		{
 			if (null != ( adresseORM = AdresseORM.create(
 					adresse.getVoie(),
 					adresse.getVille(),
 					adresse.getCodePostal(),
-					adresse.getNumeroTelephone())
+					adresse.getTelephone())
 						)
 				)
 			{
 				tabAdresseORM.add(adresseORM);
+				
+				// Créer l'objet DAO
 				Eleve_has_AdresseDAO eleveHasAdresse = new Eleve_has_AdresseDAO(
 										eleveORM.getId(),
 										adresseORM.getIdAdresse());
+				
+				// Insérer l'objet dans la base de données
+				if (!eleveHasAdresse.dbInsert())
+				{
+					throw new  SQLException("Erreur ajout table de liaison");
+				}
 			}
 		}
+		*/
 		
 		return eleveORM;
 	}
@@ -159,7 +169,7 @@ public class EleveORM {
 			// Récupérer la civilité
 			CiviliteORM civilite = CiviliteORM.read(objDAO.getCivilite_id());
 			
-			// Creer un obj ClasseORM avec les valeurs trouvées en base
+			// Creer un obj EleveORM avec les valeurs trouvées en base
 			objORM = new EleveORM(objDAO.getStatutEleve(),civilite);
 			
 			// Récupérer les adresses
@@ -177,11 +187,45 @@ public class EleveORM {
 	}
 	
 	/**
+	 * METHODE: LECTURE DE TOUS LES ELEVES
+	 * @return ArrayList<EleveORM >
+	 * @throws SQLException
+	 */
+	public static ArrayList<EleveORM > read() throws SQLException 
+	{
+		ArrayList<EleveORM > tabORM = new ArrayList<EleveORM >();
+		ArrayList<EleveDAO > tabDAO = new ArrayList<EleveDAO>();
+		
+		// LIT les valeurs en base de donnée
+		tabDAO = EleveDAO.dbSelectAll();
+		if (!tabDAO.isEmpty())
+		{
+			// DECLARE et INITIALISE les valeurs pour la couche ORM
+			EleveORM objORM;
+			for (EleveDAO objDAO : tabDAO)
+			{
+				objORM = new EleveORM(
+						objDAO.getStatutEleve(),
+						CiviliteORM.read(objDAO.getCivilite_id()));
+				tabORM.add(objORM);
+				
+				//FIXME affichage des adresses ?
+			}
+		}
+		else 
+		{			
+			throw new SQLException ("Pas d'Eleve dans la BDD");
+		}
+		
+		return tabORM;
+	}
+	
+	/**
 	 * METHODE: MISE A JOUR Eleve
 	 * @param id
+	 * @param statut
 	 * @param civilite
 	 * @param adresse
-	 * @param utilisateur
 	 * @return
 	 * @throws SQLException
 	 */
@@ -227,10 +271,15 @@ public class EleveORM {
 	 * METHODE: EFFACER Eleve
 	 * @param id
 	 * @return boolean
+	 * @throws SQLException 
 	 */
-	public boolean delete(Integer id)
+	public boolean delete(Integer id) throws SQLException
 	{
-		return EleveDAO.dbDeleteFromId(id);
+		boolean ret = false;
+		// FIXME : il faut détruire les adresses et le lien de la table de liaison (méthode de Eleve_has_Adresse)
+		if (CiviliteDAO.dbDeleteFromId(EleveORM.read(id).getCivilite().getId()))
+			ret = EleveDAO.dbDeleteFromId(id);
+		return ret;
 	}
 	
 }

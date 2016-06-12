@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import packageJDBC.JDBCConnection;
 
@@ -147,6 +148,45 @@ public class UtilisateurDAO implements InterfaceDb {
 		// Start of user code for method dbSelectFromId
 		// End of user code
 	}
+	
+	/**
+	 * Description of the method dbSelectAll.
+	 * @return ArrayList <UtilisateurDAO>
+	 */
+	public static ArrayList<UtilisateurDAO> dbSelectAll() {
+
+		ArrayList<UtilisateurDAO> tabUtilisateur = new ArrayList<UtilisateurDAO>();
+		UtilisateurDAO retObj = null;
+		Connection conn = JDBCConnection.getInstance();
+		
+		String sql = "SELECT * FROM "+table;
+		ResultSet rs = null;
+		Statement stmt = null;
+		
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if(rs.first()){
+				do{
+					retObj = new UtilisateurDAO(rs.getInt("id"),
+											rs.getString("login"),
+											rs.getString("pwd"),
+											Role.valueOf(rs.getString("role")));
+					tabUtilisateur.add(retObj);
+				}while(rs.next());
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return tabUtilisateur;
+		// Start of user code for method dbSelectFromId
+		// End of user code
+	}
+	
 
 	/**
 	 * Description of the method dbDeleteFromId.
@@ -205,11 +245,6 @@ public class UtilisateurDAO implements InterfaceDb {
 				&& this.getRole().equals(obj.getRole()));
 	}
 
-	
-	
-	
-	
-	
 	/**
 	 * Accesseurs
 	 * @return

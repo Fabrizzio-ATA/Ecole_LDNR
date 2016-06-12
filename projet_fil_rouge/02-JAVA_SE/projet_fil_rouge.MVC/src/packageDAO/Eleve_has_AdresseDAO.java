@@ -152,12 +152,12 @@ public class Eleve_has_AdresseDAO implements InterfaceDb {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
-				while(rs.next()){
+				do{
 					retObj = new Eleve_has_AdresseDAO(rs.getInt("id"),
 														rs.getInt("Eleve_id"),
 														rs.getInt("Adresse_id"));
 					tabEleve_has_Adresse.add(retObj);
-				}
+				}while(rs.next());
 			}
 			rs.close();
 			stmt.close();

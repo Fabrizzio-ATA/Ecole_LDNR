@@ -152,12 +152,12 @@ public class Eleve_has_ClasseDAO implements InterfaceDb {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
-				while(rs.next()){
+				do{
 					retObj = new Eleve_has_ClasseDAO(rs.getInt("id"),
 														rs.getInt("Eleve_id"),
 														rs.getInt("Classe_id"));
 					tabEleve_has_Classe.add(retObj);
-				}
+				}while(rs.next());
 			}
 			rs.close();
 			stmt.close();

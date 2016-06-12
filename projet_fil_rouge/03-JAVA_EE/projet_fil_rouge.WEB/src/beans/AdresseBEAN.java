@@ -9,7 +9,7 @@ public class AdresseBEAN implements Serializable {
 	private String voie;
 	private String codePostal;
 	private String ville;
-	private String numeroTelephone;
+	private String telephone;
 	
 	public String getVoie() {
 		return voie;
@@ -29,10 +29,10 @@ public class AdresseBEAN implements Serializable {
 	public void setVille(String ville) {
 		this.ville = ville;
 	}
-	public String getNumeroTelephone() {
-		return numeroTelephone;
+	public String getTelephone() {
+		return telephone;
 	}
-	public void setNumeroTelephone(String numeroTelephone) {
-		this.numeroTelephone = numeroTelephone;
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
 	}
 }

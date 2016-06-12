@@ -122,13 +122,13 @@ public class EnseignantDAO implements InterfaceDb {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
-				while(rs.next()){
+				do{
 					retObj = new EnseignantDAO(rs.getInt("id"),
 												rs.getInt("Civilite_id"),
 												rs.getInt("Adresse_id"),
 												rs.getInt("Utilisateur_id"));
 					tabEnseignant.add(retObj);
-				}
+				}while(rs.next());
 			}
 			rs.close();
 			stmt.close();

@@ -18,14 +18,14 @@ public class UtilisateurORM {
 	 * @param id
 	 * @param login
 	 * @param password
-	 * @param enseignant
+	 * @param role
 	 */
-	private UtilisateurORM(Integer id, String login, String password, Role enseignant) {
+	private UtilisateurORM(Integer id, String login, String password, Role role) {
 		super();
 		this.id = id;
 		this.login = login;
 		this.password = password;
-		this.role = enseignant;
+		this.role = role;
 	}
 
 	
@@ -81,10 +81,38 @@ public class UtilisateurORM {
 		return objORM;
 	}
 	
-	//@Override
-	public ArrayList<UtilisateurORM> read() {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * METHODE: LECTURE DE TOUS LES UTILISATEURS
+	 * @return ArrayList<UtilisateurORM >
+	 * @throws SQLException
+	 */
+	public static ArrayList<UtilisateurORM> read() throws SQLException {
+		ArrayList<UtilisateurORM > tabORM = new ArrayList<UtilisateurORM >();
+		ArrayList<UtilisateurDAO > tabDAO = new ArrayList<UtilisateurDAO>();
+		
+		// LIT les valeurs en base de donnée
+		tabDAO = UtilisateurDAO.dbSelectAll();
+		if (!tabDAO.isEmpty())
+		{
+			// DECLARE et INITIALISE les valeurs pour la couche ORM
+			UtilisateurORM objORM;
+			for (UtilisateurDAO objDAO : tabDAO)
+			{
+				objORM = new UtilisateurORM(
+						objDAO.getId(),
+						objDAO.getLogin(),
+						objDAO.getPassword(),
+						objDAO.getRole()
+						);
+				tabORM.add(objORM);
+			}
+		}
+		else 
+		{			
+			throw new SQLException ("Pas d'Utilisateur dans la BDD");
+		}
+		
+		return tabORM;	
 	}
 	
 	// METHODE: MISE A JOUR UTILISATEUR
@@ -125,7 +153,7 @@ public class UtilisateurORM {
 		return objORM;
 	}
 
-	// TODO METHODE: EFFACER UTILISATEUR
+	// METHODE: EFFACER UTILISATEUR
 	public static boolean delete(Integer id) {
 		
 		return UtilisateurDAO.dbDeleteFromId(id);

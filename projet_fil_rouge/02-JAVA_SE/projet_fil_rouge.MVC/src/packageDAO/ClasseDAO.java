@@ -135,14 +135,14 @@ public class ClasseDAO implements InterfaceDb {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
-				while(rs.next()){
+				do{
 					retObj = new ClasseDAO(rs.getInt("id"),
 											rs.getString("nom"),
 											Niveau.valueOf(rs.getString("niveau")),
 											rs.getString("periode"),
 											rs.getInt("Enseignant_id"));
 					tabClasse.add(retObj);
-				}
+				}while(rs.next());
 			}
 			rs.close();
 			stmt.close();

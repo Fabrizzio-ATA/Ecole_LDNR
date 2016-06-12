@@ -29,7 +29,8 @@
 	            <li><a href="<c:url value="index.jsp"/>">Accueil</a></li>
 	            <li><a href="<c:url value="#"/>">Classe</a></li>
 	            <li><a href="<c:url value="#"/>">Eleves</a></li>
-	            <li><a href="<c:url value="#"/>">Enseignant</a></li>
+	            <li><a href="<c:url value="/URLEnseignant"/>">Enseignant</a></li>
+	            <li><a href="<c:url value="menuUtilisateur.jsp"/>">Utilisateur</a></li>
 	        </ul>
 	        	<a href="<c:url value="/URLDeconnexion"/>">déconnexion</a>
 	    </nav>

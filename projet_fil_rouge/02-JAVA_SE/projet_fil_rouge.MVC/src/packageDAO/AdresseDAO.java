@@ -173,14 +173,14 @@ public class AdresseDAO implements InterfaceDb {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
-				while(rs.next()){
+				do{
 					retObj = new AdresseDAO(rs.getInt("id"),
 											rs.getString("voie"),
 											rs.getString("ville"),
 											rs.getString("cp"),
 											rs.getString("telephone"));
 					tabAdresse.add(retObj);
-				}
+				}while(rs.next());
 			}
 			rs.close();
 			stmt.close();

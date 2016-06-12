@@ -1,12 +1,13 @@
 package beans;
 
-import packageDAO.StatutEleve;
+import packageDAO.Role;
 
 public class UtilisateurBEAN {
 
     private String email;//64
-    private String motDePasse;//16
-    private StatutEleve status;
+    private String motdepasse;//16
+    private String confirmation;//16
+    private Role role;
 
     public void setEmail(String email) {
 	this.email = email;
@@ -14,18 +15,22 @@ public class UtilisateurBEAN {
     public String getEmail() {
 	return email;
     }
-
-    public void setMotDePasse(String motDePasse) {
-	this.motDePasse = motDePasse;
+	public void setMotdepasse(String motdepasse) {
+	this.motdepasse = motdepasse;
     }
-    public String getMotDePasse() {
-	return motDePasse;
+    public String getMotdepasse() {
+	return motdepasse;
     }
-
-    public void setNom(StatutEleve status) {
-	this.status = status;
+    public String getConfirmation() {
+		return confirmation;
+	}
+	public void setConfirmation(String confirmation) {
+		this.confirmation = confirmation;
+	}
+    public void setRole(Role role) {
+	this.role = role;
     }
-    public StatutEleve getNom() {
-	return status;
+    public Role getRole() {
+	return role;
     }
 }

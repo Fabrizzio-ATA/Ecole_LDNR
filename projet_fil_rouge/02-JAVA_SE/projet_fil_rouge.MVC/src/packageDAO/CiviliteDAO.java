@@ -129,14 +129,14 @@ public class CiviliteDAO implements InterfaceDb {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
-				while(rs.next()){
+				do{
 					retObj = new CiviliteDAO(rs.getInt("id"),
 											rs.getString("nom"),
 											rs.getString("prenom"),
 											rs.getString("sexe"),
 											rs.getDate("date_naiss"));
 					tabCivilite.add(retObj);
-				}
+				}while(rs.next());
 			}
 			rs.close();
 			stmt.close();

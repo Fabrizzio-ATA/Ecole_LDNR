@@ -125,12 +125,12 @@ public class EleveDAO implements InterfaceDb {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			if(rs.first()){
-				while(rs.next()){
+				do{
 					retObj = new EleveDAO(rs.getInt("id"),
 											rs.getInt("Civilite_id"),
 											StatutEleve.valueOf(rs.getString("StatutEleve")));
 					tabEleve.add(retObj);
-				}
+				}while(rs.next());
 			}
 			rs.close();
 			stmt.close();

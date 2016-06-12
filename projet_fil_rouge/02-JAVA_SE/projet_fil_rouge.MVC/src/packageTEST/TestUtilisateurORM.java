@@ -48,10 +48,28 @@ public class TestUtilisateurORM {
 						"role:"+	objORM_2.getRole().toString());
 	}
 
-//	@Test
-//	public void testReadAll() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	public void testReadAll() {
+		System.out.println("# Test Read: ");
+		ArrayList <UtilisateurORM> tabORM = null;
+		try {
+			tabORM = UtilisateurORM.read();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("# KO Ne peut lire les utilisateurs");
+		}
+		
+		System.out.println("Liste Utilisateurs:\n");
+		for (UtilisateurORM objORM : tabORM)
+		{
+			System.out.println("# Utilisateur:"+
+							objORM.getId()+"\n"+
+				"login:"+	objORM.getLogin()+"\n"+
+				"password:"+objORM.getPassword()+"\n"+
+				"role:"+	objORM.getRole().toString());
+		}
+	}
 
 	@Test
 	public void testUpdate() {

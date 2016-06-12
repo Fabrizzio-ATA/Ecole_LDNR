@@ -1,6 +1,5 @@
 package servlets;
 import java.io.IOException;
-import java.time.LocalDate;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,33 +7,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import beans.CiviliteBEAN;
+import forms.CiviliteForm;
 
 
 public class Civilite extends HttpServlet {
 		
 	private static final long serialVersionUID = 1L;
-	
-	private static final String CHAMP_DATE_NAISS = "dateNaissance";
-	private static final String CHAMP_NOM = "nom";
-	private static final String CHAMP_PRENOM = "prenom";
-	private static final String CHAMP_SEXE = "sexe";
+
+	public static final String ATT_FORM         = "form";
+//	private static final String VUE = "/WEB-INF/AfficherCivilite.jsp";
+	private static final String VUE = "/WEB-INF/inc/civilite.jsp";
+
 	
 	public void doGet( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		/* Lit les données de la requête et enlève les espaces (trim)*/
-		String dateNaissance = request.getParameter(CHAMP_DATE_NAISS).trim();
-		String nom = request.getParameter(CHAMP_NOM).trim();
-		String prenom = request.getParameter(CHAMP_PRENOM).trim();
-		String sexe = request.getParameter(CHAMP_SEXE).trim();
 		
 		/* Une String pour passer un message à la vue */
 		String msg=null;
         /* Un booleen pour préciser si il y a une erreur */
 		boolean isError = true;
-
-		// Création et initialisation du Bean
-		CiviliteBEAN civilite = new CiviliteBEAN();
+		// Prepare l'objet
+		CiviliteForm form = new CiviliteForm();
 		
+		//Traitement de la requête et récupération du bean en résultant
+		CiviliteBEAN civiliteBEAN = form.enregistrerCivilite(request);
+		
+		/**
+		 * OLD CODE
 		// Vérification données
         if ( nom.isEmpty() || prenom.isEmpty() || sexe.isEmpty() || dateNaissance.isEmpty() ) {
             msg = "Erreur dans la création de la civilité : "
@@ -56,15 +55,18 @@ public class Civilite extends HttpServlet {
 		civilite.setNom(nom);
 		civilite.setPrenom(prenom);
 		civilite.setSexe(sexe);
-		
+		 */
+
 		// Ajout de l'attribut dans la requete pour le modele ou la vue
-		request.setAttribute( "civilite", civilite);
-		request.setAttribute( "message", msg);
-		request.setAttribute("iserror", isError);
+		request.setAttribute( "civilite", civiliteBEAN);
+		request.setAttribute(ATT_FORM, form);
+
+//		request.setAttribute( "message", msg);
+//		request.setAttribute("iserror", isError);
 		
 		// TODO Faire un try not null des champs de civilite sinon forward
 		// La servlet propage la requete à la VUE (page JSP)
-		this.getServletContext().getRequestDispatcher( "/WEB-INF/AfficherCivilite.jsp").
+		this.getServletContext().getRequestDispatcher( VUE ).
 				forward( request, response );
 	}
 	

@@ -6,7 +6,7 @@
 		<ul>
 			<li>YOULA Chrystelle | </li>
 			<li>BOUVET Guillaume | </li>
-			<li>GALINIER Fabrice  | </li>
+			<li>GALINIER Fabrice | </li>
 			<li>GADREAU Florent </li>
 		</ul>
         </div>

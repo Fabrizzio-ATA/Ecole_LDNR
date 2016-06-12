@@ -2,7 +2,11 @@ package packageORM;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
+import beans.AdresseBEAN;
+import beans.CiviliteBEAN;
+import beans.UtilisateurBEAN;
 import packageDAO.AdresseDAO;
 import packageDAO.CiviliteDAO;
 import packageDAO.EnseignantDAO;
@@ -92,27 +96,37 @@ public class EnseignantORM {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static EnseignantORM create(String nom, String prenom, String sexe, LocalDate date_naiss,
-			String voie,  String ville, String cp , String telephone, String login, String password, Role role) throws SQLException 
+	public static EnseignantORM create(CiviliteBEAN civilite, AdresseBEAN adresse, UtilisateurBEAN utilisateur) throws SQLException 
 	{
 		EnseignantORM objORM = null;
 		
-		CiviliteORM civilite = CiviliteORM.create(nom, prenom, sexe, date_naiss);
+		CiviliteORM civiliteORM = CiviliteORM.create(
+				civilite.getNom(), 
+				civilite.getPrenom(), 
+				civilite.getSexe(), 
+				civilite.getDateNaissance());	
 		
-		AdresseORM adresse = AdresseORM.create(voie, ville, cp, telephone);
+		AdresseORM adresseORM = AdresseORM.create(
+				adresse.getVoie(),
+				adresse.getVille(),
+				adresse.getCodePostal(),
+				adresse.getTelephone());
 		
-		UtilisateurORM utilisateur = UtilisateurORM.create(login, password, role);
+		UtilisateurORM utilisateurORM = UtilisateurORM.create(
+				utilisateur.getEmail(), 
+				utilisateur.getMotdepasse(), 
+				utilisateur.getRole());
 		
 		// Créer la classe DAO de l'objet courant en récupérant les id des objets en attribut
-		EnseignantDAO objDAO = new EnseignantDAO(civilite.getId(),adresse.getIdAdresse(),utilisateur.getId());
+		EnseignantDAO objDAO = new EnseignantDAO(civiliteORM.getId(),adresseORM.getIdAdresse(),utilisateurORM.getId());
 		
 		// Insérer la classe dans la base de données
 		if (objDAO.dbInsert())
 		{
 			objORM = new EnseignantORM(objDAO.getId(),
-					civilite, 
-					adresse, 
-					utilisateur);
+					civiliteORM, 
+					adresseORM, 
+					utilisateurORM);
 		}
 		else {
 			throw new  SQLException("Erreur d'enregistrement sur la civilité en base de données");
@@ -153,6 +167,39 @@ public class EnseignantORM {
 		}
 		
 		return objORM;
+	}
+	
+	/**
+	 * METHODE: LECTURE DE TOUS LES ENSEIGNANTS
+	 * @return ArrayList<EnseignantORM >
+	 * @throws SQLException
+	 */
+	public static ArrayList<EnseignantORM > read() throws SQLException 
+	{
+		ArrayList<EnseignantORM > tabORM = new ArrayList<EnseignantORM >();
+		ArrayList<EnseignantDAO > tabDAO = new ArrayList<EnseignantDAO>();
+		
+		// LIT les valeurs en base de donnée
+		tabDAO = EnseignantDAO.dbSelectAll();
+		if (!tabDAO.isEmpty())
+		{
+			// DECLARE et INITIALISE les valeurs pour la couche ORM
+			EnseignantORM objORM;
+			for (EnseignantDAO objDAO : tabDAO)
+			{
+				objORM = new EnseignantORM(
+						CiviliteORM.read(objDAO.getCivilite_id()),
+						AdresseORM.read(objDAO.getAdresse_id()),
+						UtilisateurORM.read(objDAO.getUtilisateur_id()));
+				tabORM.add(objORM);
+			}
+		}
+		else 
+		{			
+			throw new SQLException ("Pas d'enseignant dans la BDD");
+		}
+		
+		return tabORM;
 	}
 	
 	/**
@@ -211,10 +258,20 @@ public class EnseignantORM {
 	 * METHODE: EFFACER ENSEIGNANT
 	 * @param id
 	 * @return boolean
+	 * @throws SQLException 
 	 */
-	public boolean delete(Integer id)
+	public boolean delete(Integer id) throws SQLException
 	{
-		return EnseignantDAO.dbDeleteFromId(id);
+		boolean ret = false;
+		// Supprimer l'adresse, la civilité et l'utilisateur
+		if ( 	AdresseDAO.dbDeleteFromId(EnseignantORM.read(id).getAdresse().getIdAdresse())
+			&&	CiviliteDAO.dbDeleteFromId(EnseignantORM.read(id).getCivilite().getId())
+			&& 	UtilisateurDAO.dbDeleteFromId(EnseignantORM.read(id).getUtilisateur().getId()))
+		{
+				// Supprimer l'enseignant
+				ret = EnseignantDAO.dbDeleteFromId(id);
+		}
+		return ret;
 	}
 	
 }

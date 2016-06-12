@@ -39,7 +39,7 @@ public final class ConnexionForm {
 		} catch ( Exception e ) {
 			setErreur( CHAMP_PASS, e.getMessage() );
 		}
-		utilisateurBEAN.setMotDePasse( motDePasse );
+		utilisateurBEAN.setMotdepasse( motDePasse );
 		
 		/* Initialisation du résultat global de la validation. */
 		if ( erreurs.isEmpty() ) {
