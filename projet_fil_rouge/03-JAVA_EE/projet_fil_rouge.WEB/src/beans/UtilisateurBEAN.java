@@ -8,8 +8,15 @@ public class UtilisateurBEAN {
     private String motdepasse;//16
     private String confirmation;//16
     private Role role;
-
-    public void setEmail(String email) {
+	private int id;
+    
+    public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public void setEmail(String email) {
 	this.email = email;
     }
     public String getEmail() {

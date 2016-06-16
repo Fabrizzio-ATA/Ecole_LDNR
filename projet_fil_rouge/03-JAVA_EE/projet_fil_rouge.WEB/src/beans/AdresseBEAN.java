@@ -10,7 +10,14 @@ public class AdresseBEAN implements Serializable {
 	private String codePostal;
 	private String ville;
 	private String telephone;
-	
+	private int id;
+    
+    public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getVoie() {
 		return voie;
 	}

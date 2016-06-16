@@ -11,8 +11,14 @@ public class CiviliteBEAN implements Serializable {
 	private String prenom;
 	private String sexe;
 	private LocalDate dateNaissance;
-	//private String dateNaissance;
-	
+	private int id;
+    
+    public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getSexe() {
 		return sexe;
 	}
